@@ -12,10 +12,10 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 function getColorClass(seconds: number): string {
-  if (seconds === 0)     return 'heatmap-0'
-  if (seconds <= 1800)   return 'heatmap-1'   // ≤ 30 min
-  if (seconds <= 3600)   return 'heatmap-2'   // ≤ 60 min
-  if (seconds <= 5400)   return 'heatmap-3'   // ≤ 90 min
+  if (seconds === 0) return 'heatmap-0'
+  if (seconds <= 1800) return 'heatmap-1'   // ≤ 30 min
+  if (seconds <= 3600) return 'heatmap-2'   // ≤ 60 min
+  if (seconds <= 5400) return 'heatmap-3'   // ≤ 90 min
   return 'heatmap-4'                          // > 90 min
 }
 
@@ -110,7 +110,7 @@ export function HeatmapGrid({ activities, createdYear }: Props) {
   }, [activities, selectedYear, currentYear, today])
 
   return (
-    <div className="flex gap-4 items-start">
+    <div className="flex gap-4 items-stretch">
       <div className="overflow-x-auto flex-1">
         <div className="inline-block">
           {/* Month labels */}
@@ -147,9 +147,8 @@ export function HeatmapGrid({ activities, createdYear }: Props) {
                 {week.map((day, di) => (
                   <div
                     key={di}
-                    className={`w-[11px] h-[11px] rounded-sm transition-opacity ${
-                      day.date ? getColorClass(day.seconds) : 'opacity-0'
-                    }`}
+                    className={`w-[11px] h-[11px] rounded-sm transition-opacity ${day.date ? getColorClass(day.seconds) : 'opacity-0'
+                      }`}
                     onMouseEnter={day.date && day.date <= today ? (e) => {
                       const rect = (e.target as HTMLElement).getBoundingClientRect()
                       const dateLabel = day.date!.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -194,16 +193,15 @@ export function HeatmapGrid({ activities, createdYear }: Props) {
 
       {/* Year selector */}
       {years.length > 1 && (
-        <div className="flex flex-col shrink-0">
+        <div className="flex flex-col shrink-0 overflow-y-auto">
           {years.map((year) => (
             <button
               key={year}
               onClick={() => setSelectedYear(year)}
-              className={`px-2 py-0.5 text-xs rounded text-right transition-colors ${
-                year === selectedYear
-                  ? 'text-[var(--accent)] font-semibold'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-              }`}
+              className={`px-4 py-1 text-xs rounded text-right transition-colors ${year === selectedYear
+                ? 'bg-[var(--accent)] text-white font-semibold'
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#21262d]'
+                }`}
             >
               {year}
             </button>
