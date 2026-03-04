@@ -63,10 +63,13 @@ export default function DashboardLoading() {
           {/* Main content skeleton */}
           <main className="flex-1 min-w-0">
             {/* Stats bar */}
-            <div className="flex flex-wrap gap-3">
-              {[...Array(5)].map((_, i) => (
-                <Skeleton key={i} className="h-20 w-24" />
-              ))}
+            <div>
+              <Skeleton className="h-4 w-24 mb-3" />
+              <div className="flex flex-wrap gap-3">
+                {[...Array(8)].map((_, i) => (
+                  <Skeleton key={i} className="h-20 w-24" />
+                ))}
+              </div>
             </div>
 
             {/* Heatmap */}

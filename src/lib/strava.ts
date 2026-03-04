@@ -230,6 +230,31 @@ export function getSportLabel(sportType: string): string {
   return labels[sportType] ?? sportType
 }
 
+export function computeBestStreak(activities: StravaActivity[]): number {
+  if (!activities.length) return 0
+
+  const dates = Array.from(
+    new Set(activities.map((a) => a.start_date_local.split('T')[0]))
+  ).sort()
+
+  let best = 0
+  let current = 1
+
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i - 1])
+    const curr = new Date(dates[i])
+    const diffDays = (curr.getTime() - prev.getTime()) / 86400000
+    if (diffDays === 1) {
+      current++
+      if (current > best) best = current
+    } else {
+      current = 1
+    }
+  }
+
+  return Math.max(best, dates.length > 0 ? 1 : 0)
+}
+
 export function computeStreak(activities: StravaActivity[]): number {
   if (!activities.length) return 0
 
