@@ -54,7 +54,6 @@ export function computeSportStats(activities: StravaActivity[]): SportStats[] {
       total_time: number
       total_elevation: number
       total_kudos: number
-      total_partners: number
     }
   >()
 
@@ -66,7 +65,6 @@ export function computeSportStats(activities: StravaActivity[]): SportStats[] {
       total_time: 0,
       total_elevation: 0,
       total_kudos: 0,
-      total_partners: 0,
     }
     sportMap.set(st, {
       count: existing.count + 1,
@@ -74,7 +72,6 @@ export function computeSportStats(activities: StravaActivity[]): SportStats[] {
       total_time: existing.total_time + activity.moving_time,
       total_elevation: existing.total_elevation + activity.total_elevation_gain,
       total_kudos: existing.total_kudos + (activity.kudos_count || 0),
-      total_partners: existing.total_partners + Math.max(0, (activity.athlete_count || 1) - 1),
     })
   }
 

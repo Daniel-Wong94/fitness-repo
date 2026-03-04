@@ -9,7 +9,7 @@ export async function GET() {
     redirect_uri: redirectUri,
     response_type: 'code',
     approval_prompt: 'auto',
-    scope: 'read,activity:read_all',
+    scope: 'read,profile:read_all,activity:read_all',
   })
 
   return NextResponse.redirect(

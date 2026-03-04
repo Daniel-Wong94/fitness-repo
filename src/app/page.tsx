@@ -61,7 +61,7 @@ export default function LandingPage({
           {
             icon: '🔥',
             title: 'Streaks & Stats',
-            desc: 'Track kudos, streaks, partners, and more at a glance',
+            desc: 'Track kudos, streaks, followers, and more at a glance',
           },
         ].map(({ icon, title, desc }) => (
           <div

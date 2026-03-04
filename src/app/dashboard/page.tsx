@@ -149,7 +149,7 @@ export default async function DashboardPage() {
           {/* Main content */}
           <main className="flex-1 min-w-0">
             {/* Stats bar */}
-            <StatsBar activities={activities} />
+            <StatsBar activities={activities} athlete={athlete} />
 
             {/* Heatmap */}
             <div className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">

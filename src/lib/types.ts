@@ -8,6 +8,8 @@ export interface StravaAthlete {
   country: string
   profile: string
   profile_medium: string
+  follower_count?: number
+  friend_count?: number
 }
 
 export interface StravaActivity {
@@ -58,5 +60,4 @@ export interface SportStats {
   total_time: number
   total_elevation: number
   total_kudos: number
-  total_partners: number
 }

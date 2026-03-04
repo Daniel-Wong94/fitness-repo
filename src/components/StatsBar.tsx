@@ -1,27 +1,24 @@
 'use client'
 
-import type { StravaActivity } from '@/lib/types'
+import type { StravaActivity, StravaAthlete } from '@/lib/types'
 import { computeStreak } from '@/lib/strava'
 import { useSettings } from '@/lib/settings-context'
 
 interface Props {
   activities: StravaActivity[]
+  athlete?: StravaAthlete
   /** If provided, only show stats relevant to a single sport */
   sportMode?: boolean
   totalDistance?: number
   totalElevation?: number
 }
 
-export function StatsBar({ activities, sportMode, totalDistance, totalElevation }: Props) {
+export function StatsBar({ activities, athlete, sportMode, totalDistance, totalElevation }: Props) {
   const { settings } = useSettings()
   const { units } = settings
 
   const totalKudos = activities.reduce((sum, a) => sum + (a.kudos_count || 0), 0)
   const sportTypes = new Set(activities.map((a) => a.sport_type)).size
-  const totalPartners = activities.reduce(
-    (sum, a) => sum + Math.max(0, (a.athlete_count || 1) - 1),
-    0
-  )
   const streak = computeStreak(activities)
 
   function fmtDistance(meters: number) {
@@ -78,16 +75,25 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation 
         },
       ]
 
+  const peopleIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+      <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.001 4.001 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5zM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5z" />
+    </svg>
+  )
+
   const sharedStats = [
-    {
-      label: 'Partners',
-      value: totalPartners.toLocaleString(),
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
-          <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.001 4.001 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5zM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5z" />
-        </svg>
-      ),
-    },
+    ...(athlete ? [
+      {
+        label: 'Followers',
+        value: (athlete.follower_count ?? 0).toLocaleString(),
+        icon: peopleIcon,
+      },
+      {
+        label: 'Following',
+        value: (athlete.friend_count ?? 0).toLocaleString(),
+        icon: peopleIcon,
+      },
+    ] : []),
     {
       label: 'Day Streak',
       value: streak.toString(),
