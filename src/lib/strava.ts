@@ -7,7 +7,7 @@ const STRAVA_API = 'https://www.strava.com/api/v3'
 export async function fetchAthlete(accessToken: string): Promise<StravaAthlete> {
   const res = await fetch(`${STRAVA_API}/athlete`, {
     headers: { Authorization: `Bearer ${accessToken}` },
-    cache: 'no-store',
+    next: { revalidate: 3600 }, // 1 hour — profile rarely changes
   })
 
   if (!res.ok) {
@@ -21,7 +21,7 @@ export async function fetchAthlete(accessToken: string): Promise<StravaAthlete> 
 export async function fetchClubs(accessToken: string): Promise<StravaClub[]> {
   const res = await fetch(`${STRAVA_API}/athlete/clubs`, {
     headers: { Authorization: `Bearer ${accessToken}` },
-    cache: 'no-store',
+    next: { revalidate: 86400 }, // 1 day — clubs very rarely change
   })
   if (!res.ok) throw new Error(`Failed to fetch clubs: ${res.status}`)
   return res.json()
@@ -44,7 +44,7 @@ export async function fetchAllActivities(
       `${STRAVA_API}/athlete/activities?page=${page}&per_page=200`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
-        cache: 'no-store',
+        next: { revalidate: 1800 }, // 30 min — new activities up to ~5×/day
       }
     )
     if (!res.ok) throw new Error(`Failed to fetch activities: ${res.status}`)
@@ -59,7 +59,7 @@ export async function fetchAllActivities(
 export async function fetchActivity(accessToken: string, id: number): Promise<DetailedActivity> {
   const res = await fetch(`${STRAVA_API}/activities/${id}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
-    cache: 'no-store',
+    next: { revalidate: 21600 }, // 6 hours — activity details almost never change after creation
   })
   if (!res.ok) throw new Error(`Failed to fetch activity: ${res.status}`)
   return res.json()
@@ -68,7 +68,7 @@ export async function fetchActivity(accessToken: string, id: number): Promise<De
 export async function fetchActivityComments(accessToken: string, id: number): Promise<StravaComment[]> {
   const res = await fetch(`${STRAVA_API}/activities/${id}/comments?per_page=200`, {
     headers: { Authorization: `Bearer ${accessToken}` },
-    cache: 'no-store',
+    next: { revalidate: 300 }, // 5 min — comments change more often
   })
   if (!res.ok) throw new Error(`Failed to fetch comments: ${res.status}`)
   return res.json()
