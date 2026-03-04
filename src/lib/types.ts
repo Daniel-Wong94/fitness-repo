@@ -56,6 +56,27 @@ export interface StravaClub {
   country: string
   member_count: number
   profile_medium: string
+  description?: string
+  cover_photo?: string
+  profile?: string
+  url?: string
+}
+
+export interface ClubActivity {
+  athlete: { firstname: string; lastname: string }
+  name: string
+  distance: number
+  moving_time: number
+  total_elevation_gain: number
+  type: string
+  sport_type: string
+}
+
+export interface ClubMember {
+  firstname: string
+  lastname: string
+  profile_medium: string
+  profile: string
 }
 
 export interface SessionData {

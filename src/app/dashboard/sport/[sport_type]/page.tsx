@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getSessionWithRefresh } from '@/lib/auth'
 import {
   fetchAthlete,
   fetchAllActivities,
+  fetchClubs,
   getSportIcon,
   getSportLabel,
 } from '@/lib/strava'
@@ -27,11 +29,30 @@ export default async function SportDetailPage({ params }: Props) {
 
   const sportType = decodeURIComponent(params.sport_type)
 
-  const athlete = await fetchAthlete(session.access_token)
+  const SPORT_TO_CLUB: Record<string, string[]> = {
+    cycling: ['Ride', 'VirtualRide', 'MountainBikeRide', 'GravelRide', 'EBikeRide'],
+    running: ['Run', 'TrailRun', 'VirtualRun'],
+    triathlon: ['Run', 'Ride', 'Swim'],
+    swimming: ['Swim'],
+    hiking: ['Hike'],
+    walking: ['Walk'],
+  }
+
+  const [athlete, allActivities, allClubs] = await Promise.all([
+    fetchAthlete(session.access_token),
+    fetchAllActivities(session.access_token),
+    fetchClubs(session.access_token),
+  ])
+
   const createdYear = athlete.created_at
     ? new Date(athlete.created_at).getFullYear()
     : new Date().getFullYear()
-  const allActivities = await fetchAllActivities(session.access_token)
+
+  const matchingClubs = allClubs.filter((club) => {
+    const clubSport = club.sport_type?.toLowerCase()
+    const activityTypes = SPORT_TO_CLUB[clubSport] ?? []
+    return activityTypes.includes(sportType)
+  })
 
   const activities = allActivities.filter((a) => a.sport_type === sportType)
 
@@ -155,8 +176,45 @@ export default async function SportDetailPage({ params }: Props) {
             </div>
           </main>
 
-          <aside className="lg:w-64 flex-shrink-0">
+          <aside className="lg:w-64 flex-shrink-0 space-y-6">
             <GearBar segments={gearSegments} />
+            {matchingClubs.length > 0 && (
+              <div>
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                  Clubs
+                </h2>
+                <ul className="space-y-2">
+                  {matchingClubs.map((club) => (
+                    <li key={club.id}>
+                      <Link
+                        href={`/dashboard/club/${club.id}`}
+                        className="flex items-center gap-2 group"
+                      >
+                        {club.profile_medium ? (
+                          <div className="w-7 h-7 rounded-md overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
+                            <Image
+                              src={club.profile_medium}
+                              alt={club.name}
+                              width={28}
+                              height={28}
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-7 h-7 rounded-md bg-gray-100 dark:bg-[#21262d] flex items-center justify-center text-sm flex-shrink-0">
+                            🪩
+                          </div>
+                        )}
+                        <span className="text-sm text-gray-900 dark:text-[#e6edf3] truncate group-hover:text-[var(--accent)] transition-colors">
+                          {club.name}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </aside>
         </div>
       </div>

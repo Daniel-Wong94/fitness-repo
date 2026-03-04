@@ -1,4 +1,4 @@
-import type { StravaActivity, StravaAthlete, StravaClub, SportStats, DetailedActivity, StravaComment } from './types'
+import type { StravaActivity, StravaAthlete, StravaClub, ClubActivity, ClubMember, SportStats, DetailedActivity, StravaComment } from './types'
 
 export type Units = 'metric' | 'imperial'
 
@@ -24,6 +24,41 @@ export async function fetchClubs(accessToken: string): Promise<StravaClub[]> {
     next: { revalidate: 86400 }, // 1 day — clubs very rarely change
   })
   if (!res.ok) throw new Error(`Failed to fetch clubs: ${res.status}`)
+  return res.json()
+}
+
+export async function fetchClubDetail(token: string, clubId: string): Promise<StravaClub> {
+  const res = await fetch(`${STRAVA_API}/clubs/${clubId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    next: { revalidate: 3600 },
+  })
+  if (!res.ok) throw new Error(`Failed to fetch club: ${res.status}`)
+  return res.json()
+}
+
+export async function fetchClubActivities(
+  token: string,
+  clubId: string,
+  page = 1,
+  perPage = 20
+): Promise<ClubActivity[]> {
+  const res = await fetch(
+    `${STRAVA_API}/clubs/${clubId}/activities?page=${page}&per_page=${perPage}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      next: { revalidate: 900 },
+    }
+  )
+  if (!res.ok) throw new Error(`Failed to fetch club activities: ${res.status}`)
+  return res.json()
+}
+
+export async function fetchClubMembers(token: string, clubId: string): Promise<ClubMember[]> {
+  const res = await fetch(`${STRAVA_API}/clubs/${clubId}/members?per_page=30`, {
+    headers: { Authorization: `Bearer ${token}` },
+    next: { revalidate: 3600 },
+  })
+  if (!res.ok) throw new Error(`Failed to fetch club members: ${res.status}`)
   return res.json()
 }
 
