@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import type { SportStats } from '@/lib/types'
 import { getSportIcon, getSportLabel, formatDistance } from '@/lib/strava'
+import { useSettings } from '@/lib/settings-context'
 
 interface Props {
   sport: SportStats
@@ -8,6 +11,8 @@ interface Props {
 }
 
 export function SportTypeCard({ sport, pinned }: Props) {
+  const { settings } = useSettings()
+
   return (
     <Link
       href={`/dashboard/sport/${encodeURIComponent(sport.sport_type)}`}
@@ -47,7 +52,7 @@ export function SportTypeCard({ sport, pinned }: Props) {
           </span>
         )}
         {sport.total_distance > 0 && (
-          <span>{formatDistance(sport.total_distance)}</span>
+          <span>{formatDistance(sport.total_distance, settings.units)}</span>
         )}
       </div>
 

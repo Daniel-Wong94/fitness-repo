@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import type { StravaActivity } from '@/lib/types'
 import {
@@ -8,6 +10,7 @@ import {
   getSportLabel,
 } from '@/lib/strava'
 import { ActivityBadge } from './ActivityBadge'
+import { useSettings } from '@/lib/settings-context'
 
 interface Props {
   activities: StravaActivity[]
@@ -16,6 +19,7 @@ interface Props {
 }
 
 export function ActivityFeed({ activities, limit = 20 }: Props) {
+  const { settings } = useSettings()
   const shown = limit === Infinity ? activities : activities.slice(0, limit)
 
   if (shown.length === 0) {
@@ -58,7 +62,7 @@ export function ActivityFeed({ activities, limit = 20 }: Props) {
               {activity.distance > 0 && (
                 <>
                   <span>·</span>
-                  <span>{formatDistance(activity.distance)}</span>
+                  <span>{formatDistance(activity.distance, settings.units)}</span>
                 </>
               )}
               {activity.moving_time > 0 && (

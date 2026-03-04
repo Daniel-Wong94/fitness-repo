@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { getSessionWithRefresh } from '@/lib/auth'
 import {
   fetchAthlete,
@@ -53,14 +54,25 @@ export default async function DashboardPage() {
               Strava Dashboard
             </span>
           </div>
-          <form action="/api/auth/logout" method="POST">
-            <button
-              type="submit"
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          <div className="flex items-center gap-3">
+            <Link
+              href="/settings"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              title="Settings"
             >
-              Sign out
-            </button>
-          </form>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+                <path fillRule="evenodd" d="M6.459 1.01a.75.75 0 0 1 .99.232l.308.476a5.033 5.033 0 0 1 1.01-.005l.32-.468a.75.75 0 0 1 1.227.86l-.302.442c.196.18.378.375.543.583l.502-.17a.75.75 0 0 1 .894 1.03l-.258.515c.126.228.234.467.323.715l.547-.05a.75.75 0 0 1 .658 1.205l-.376.445c.03.247.044.498.044.752 0 .254-.015.505-.044.752l.376.445a.75.75 0 0 1-.658 1.206l-.547-.05a6.036 6.036 0 0 1-.323.715l.258.515a.75.75 0 0 1-.894 1.03l-.502-.17a5.134 5.134 0 0 1-.543.583l.302.442a.75.75 0 0 1-1.227.86l-.32-.468a5.033 5.033 0 0 1-1.01-.005l-.308.476a.75.75 0 0 1-1.222-.868l.275-.425A5.04 5.04 0 0 1 5 13.273l-.5.17a.75.75 0 0 1-.893-1.031l.257-.514a5.954 5.954 0 0 1-.323-.716l-.547.05a.75.75 0 0 1-.658-1.205l.376-.445A6.165 6.165 0 0 1 2.668 8c0-.254.015-.505.044-.752l-.376-.445a.75.75 0 0 1 .658-1.206l.547.05c.09-.248.197-.487.323-.715l-.257-.515a.75.75 0 0 1 .893-1.031l.5.17c.164-.208.346-.403.542-.583l-.274-.426a.75.75 0 0 1 .232-.99ZM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" clipRule="evenodd" />
+              </svg>
+            </Link>
+            <form action="/api/auth/logout" method="POST">
+              <button
+                type="submit"
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 

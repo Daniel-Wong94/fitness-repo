@@ -1,5 +1,7 @@
 import type { StravaActivity, StravaAthlete, StravaClub, SportStats } from './types'
 
+export type Units = 'metric' | 'imperial'
+
 const STRAVA_API = 'https://www.strava.com/api/v3'
 
 export async function fetchAthlete(accessToken: string): Promise<StravaAthlete> {
@@ -81,7 +83,12 @@ export function computeSportStats(activities: StravaActivity[]): SportStats[] {
     .sort((a, b) => b.count - a.count)
 }
 
-export function formatDistance(meters: number): string {
+export function formatDistance(meters: number, units: Units = 'metric'): string {
+  if (units === 'imperial') {
+    const miles = meters / 1609.344
+    if (miles < 0.1) return `${Math.round(meters * 3.28084)}ft`
+    return `${miles.toFixed(1)}mi`
+  }
   const km = meters / 1000
   if (km < 1) return `${Math.round(meters)}m`
   return `${km.toFixed(1)}km`
@@ -96,19 +103,27 @@ export function formatDuration(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
-export function formatPace(metersPerSecond: number): string {
+export function formatPace(metersPerSecond: number, units: Units = 'metric'): string {
   if (!metersPerSecond || metersPerSecond <= 0) return '—'
+  if (units === 'imperial') {
+    const secPerMile = 1609.344 / metersPerSecond
+    const min = Math.floor(secPerMile / 60)
+    const sec = Math.round(secPerMile % 60)
+    return `${min}:${sec.toString().padStart(2, '0')}/mi`
+  }
   const secPerKm = 1000 / metersPerSecond
   const min = Math.floor(secPerKm / 60)
   const sec = Math.round(secPerKm % 60)
   return `${min}:${sec.toString().padStart(2, '0')}/km`
 }
 
-export function formatSpeed(metersPerSecond: number): string {
+export function formatSpeed(metersPerSecond: number, units: Units = 'metric'): string {
+  if (units === 'imperial') return `${(metersPerSecond * 2.23694).toFixed(1)} mph`
   return `${(metersPerSecond * 3.6).toFixed(1)} km/h`
 }
 
-export function formatElevation(meters: number): string {
+export function formatElevation(meters: number, units: Units = 'metric'): string {
+  if (units === 'imperial') return `${Math.round(meters * 3.28084)}ft`
   return `${Math.round(meters)}m`
 }
 

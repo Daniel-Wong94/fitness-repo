@@ -4,7 +4,8 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const session = request.cookies.get('strava_session')
 
-  if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
+  const { pathname } = request.nextUrl
+  if (!session && (pathname.startsWith('/dashboard') || pathname.startsWith('/settings'))) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
@@ -12,5 +13,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ['/dashboard/:path*', '/settings'],
 }

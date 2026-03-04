@@ -1,5 +1,8 @@
+'use client'
+
 import type { StravaActivity } from '@/lib/types'
 import { computeStreak } from '@/lib/strava'
+import { useSettings } from '@/lib/settings-context'
 
 interface Props {
   activities: StravaActivity[]
@@ -10,6 +13,9 @@ interface Props {
 }
 
 export function StatsBar({ activities, sportMode, totalDistance, totalElevation }: Props) {
+  const { settings } = useSettings()
+  const { units } = settings
+
   const totalKudos = activities.reduce((sum, a) => sum + (a.kudos_count || 0), 0)
   const sportTypes = new Set(activities.map((a) => a.sport_type)).size
   const totalPartners = activities.reduce(
@@ -17,6 +23,18 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation 
     0
   )
   const streak = computeStreak(activities)
+
+  function fmtDistance(meters: number) {
+    if (units === 'imperial') {
+      return `${(meters / 1609.344).toFixed(1)}mi`
+    }
+    return `${(meters / 1000).toFixed(0)}km`
+  }
+
+  function fmtElevation(meters: number) {
+    if (units === 'imperial') return `${Math.round(meters * 3.28084)}ft`
+    return `${Math.round(meters)}m`
+  }
 
   const baseStats = [
     {
@@ -43,12 +61,12 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation 
     ? [
         totalDistance !== undefined && {
           label: 'Distance',
-          value: `${(totalDistance / 1000).toFixed(0)}km`,
+          value: fmtDistance(totalDistance),
           icon: <span className="text-sm">📏</span>,
         },
         totalElevation !== undefined && {
           label: 'Elevation',
-          value: `${Math.round(totalElevation)}m`,
+          value: fmtElevation(totalElevation),
           icon: <span className="text-sm">⛰️</span>,
         },
       ].filter(Boolean)
