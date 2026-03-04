@@ -11,6 +11,7 @@ export async function fetchAthlete(accessToken: string): Promise<StravaAthlete> 
   })
 
   if (!res.ok) {
+    console.log(res)
     console.error('Failed to fetch athlete:', await res.statusText)
     throw new Error(`Failed to fetch athlete: ${res.status}`)
   }
