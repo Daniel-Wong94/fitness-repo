@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { StravaActivity } from '@/lib/types'
 
 interface Props {
@@ -31,7 +31,15 @@ interface DayCell {
   dateStr: string
 }
 
+interface Tooltip {
+  text: string
+  x: number  // viewport x
+  y: number  // viewport y (top of cell)
+}
+
 export function HeatmapGrid({ activities }: Props) {
+  const [tooltip, setTooltip] = useState<Tooltip | null>(null)
+
   const { weeks, monthLabels } = useMemo(() => {
     const secondsByDate: Record<string, number> = {}
     for (const activity of activities) {
@@ -115,14 +123,22 @@ export function HeatmapGrid({ activities }: Props) {
               {week.map((day, di) => (
                 <div
                   key={di}
-                  title={
-                    day.date
-                      ? `${day.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}: ${day.seconds > 0 ? fmtDuration(day.seconds) + ' active' : 'no activity'}`
-                      : ''
-                  }
                   className={`w-[11px] h-[11px] rounded-sm transition-opacity ${
                     day.date ? getColorClass(day.seconds) : 'opacity-0'
                   }`}
+                  onMouseEnter={day.date ? (e) => {
+                    const rect = (e.target as HTMLElement).getBoundingClientRect()
+                    const dateLabel = day.date!.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    const text = day.seconds > 0
+                      ? `${fmtDuration(day.seconds)} active time on ${dateLabel}`
+                      : `No activity on ${dateLabel}`
+                    setTooltip({
+                      text,
+                      x: rect.left + rect.width / 2,
+                      y: rect.top,
+                    })
+                  } : undefined}
+                  onMouseLeave={() => setTooltip(null)}
                 />
               ))}
             </div>
@@ -138,6 +154,16 @@ export function HeatmapGrid({ activities }: Props) {
           <span>More</span>
         </div>
       </div>
+
+      {tooltip && (
+        <div
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full px-2 py-1 rounded text-xs text-white bg-gray-900 dark:bg-gray-700 whitespace-nowrap shadow"
+          style={{ left: tooltip.x, top: tooltip.y - 4 }}
+        >
+          {tooltip.text}
+          <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-gray-900 dark:border-t-gray-700" />
+        </div>
+      )}
     </div>
   )
 }
