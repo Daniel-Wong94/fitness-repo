@@ -4,9 +4,8 @@ import Link from 'next/link'
 import { getSessionWithRefresh } from '@/lib/auth'
 import {
   fetchAthlete,
-  fetchActivities,
+  fetchAllActivities,
   fetchClubs,
-  get52WeeksAgo,
   computeSportStats,
 } from '@/lib/strava'
 import { HeatmapGrid } from '@/components/HeatmapGrid'
@@ -22,11 +21,19 @@ export default async function DashboardPage() {
     redirect('/')
   }
 
-  const [athlete, activities, clubs] = await Promise.all([
+  const [athlete, clubs] = await Promise.all([
     fetchAthlete(session.access_token),
-    fetchActivities(session.access_token, get52WeeksAgo()),
     fetchClubs(session.access_token),
   ])
+
+  const createdAt = athlete.created_at
+    ? Math.floor(new Date(athlete.created_at).getTime() / 1000)
+    : 0
+  const createdYear = athlete.created_at
+    ? new Date(athlete.created_at).getFullYear()
+    : new Date().getFullYear()
+
+  const activities = await fetchAllActivities(session.access_token, createdAt)
 
   const sportStats = computeSportStats(activities)
   const pinnedSports = sportStats.slice(0, 4)
@@ -153,10 +160,7 @@ export default async function DashboardPage() {
 
             {/* Heatmap */}
             <div className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
-                {activities.length} activities in the last year
-              </h2>
-              <HeatmapGrid activities={activities} />
+              <HeatmapGrid activities={activities} createdYear={createdYear} />
             </div>
 
             {/* Pinned sport cards */}

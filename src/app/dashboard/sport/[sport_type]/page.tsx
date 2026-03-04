@@ -3,8 +3,7 @@ import Link from 'next/link'
 import { getSessionWithRefresh } from '@/lib/auth'
 import {
   fetchAthlete,
-  fetchActivities,
-  get52WeeksAgo,
+  fetchAllActivities,
   getSportIcon,
   getSportLabel,
 } from '@/lib/strava'
@@ -26,10 +25,14 @@ export default async function SportDetailPage({ params }: Props) {
 
   const sportType = decodeURIComponent(params.sport_type)
 
-  const [athlete, allActivities] = await Promise.all([
-    fetchAthlete(session.access_token),
-    fetchActivities(session.access_token, get52WeeksAgo()),
-  ])
+  const athlete = await fetchAthlete(session.access_token)
+  const createdAt = athlete.created_at
+    ? Math.floor(new Date(athlete.created_at).getTime() / 1000)
+    : 0
+  const createdYear = athlete.created_at
+    ? new Date(athlete.created_at).getFullYear()
+    : new Date().getFullYear()
+  const allActivities = await fetchAllActivities(session.access_token, createdAt)
 
   const activities = allActivities.filter((a) => a.sport_type === sportType)
 
@@ -116,10 +119,7 @@ export default async function SportDetailPage({ params }: Props) {
 
         {/* Heatmap */}
         <div className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
-            {activities.length} {getSportLabel(sportType).toLowerCase()} session{activities.length !== 1 ? 's' : ''} in the last year
-          </h2>
-          <HeatmapGrid activities={activities} />
+          <HeatmapGrid activities={activities} createdYear={createdYear} />
         </div>
 
         {/* PRs / Bests */}

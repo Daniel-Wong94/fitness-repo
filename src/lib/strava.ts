@@ -45,6 +45,22 @@ export function get52WeeksAgo(): number {
   return Math.floor(date.getTime() / 1000)
 }
 
+export async function fetchAllActivities(
+  accessToken: string,
+  after: number
+): Promise<StravaActivity[]> {
+  const allActivities: StravaActivity[] = []
+  let page = 1
+
+  while (true) {
+    const batch = await fetchActivities(accessToken, after, page, 200)
+    allActivities.push(...batch)
+    if (batch.length < 200) break
+    page++
+  }
+  return allActivities
+}
+
 export function computeSportStats(activities: StravaActivity[]): SportStats[] {
   const sportMap = new Map<
     string,

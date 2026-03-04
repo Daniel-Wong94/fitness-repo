@@ -10,6 +10,7 @@ export interface StravaAthlete {
   profile_medium: string
   follower_count?: number
   friend_count?: number
+  created_at?: string
 }
 
 export interface StravaActivity {
