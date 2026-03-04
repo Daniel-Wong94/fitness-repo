@@ -1,3 +1,10 @@
+export interface AthleteGear {
+  id: string
+  name: string
+  primary: boolean
+  distance: number
+}
+
 export interface StravaAthlete {
   id: number
   username: string
@@ -12,6 +19,8 @@ export interface StravaAthlete {
   follower_count?: number
   friend_count?: number
   created_at?: string
+  bikes?: AthleteGear[]
+  shoes?: AthleteGear[]
 }
 
 export interface StravaActivity {
@@ -35,6 +44,7 @@ export interface StravaActivity {
   suffer_score?: number
   pr_count?: number
   achievement_count?: number
+  gear_id?: string
 }
 
 export interface StravaClub {

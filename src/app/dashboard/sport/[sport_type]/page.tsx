@@ -11,6 +11,7 @@ import { HeatmapGrid } from '@/components/HeatmapGrid'
 import { StatsBar } from '@/components/StatsBar'
 import { ActivityFeed } from '@/components/ActivityFeed'
 import { SportBests } from '@/components/SportBests'
+import { GearBar } from '@/components/GearBar'
 import { FaRunning } from 'react-icons/fa'
 
 interface Props {
@@ -62,6 +63,28 @@ export default async function SportDetailPage({ params }: Props) {
 
   const isPaceSport = ['Run', 'TrailRun', 'Walk', 'Hike', 'VirtualRun'].includes(sportType)
 
+  // Gear breakdown
+  const gearLookup = new Map<string, string>()
+  for (const g of [...(athlete.bikes ?? []), ...(athlete.shoes ?? [])]) {
+    gearLookup.set(g.id, g.name)
+  }
+
+  const gearDistMap = new Map<string | null, number>()
+  for (const a of activities) {
+    const key = a.gear_id ?? null
+    gearDistMap.set(key, (gearDistMap.get(key) ?? 0) + a.distance)
+  }
+
+  const COLORS = ['#3b82f6', '#f97316', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899']
+  const gearSegments = Array.from(gearDistMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([id, distance], i) => ({
+      id,
+      name: id ? (gearLookup.get(id) ?? 'Unknown gear') : 'No gear',
+      distance,
+      color: id ? COLORS[i % COLORS.length] : '#6b7280',
+    }))
+
   return (
     <div className="min-h-screen bg-white dark:bg-[#0d1117]">
       {/* Top nav */}
@@ -100,33 +123,41 @@ export default async function SportDetailPage({ params }: Props) {
           </span>
         </nav>
 
-        {/* Stats */}
-        <StatsBar
-          activities={activities}
-          sportMode
-          totalDistance={totalDistance}
-          totalElevation={totalElevation}
-        />
+        <div className="flex flex-col lg:flex-row gap-8">
+          <main className="flex-1 min-w-0">
+            {/* Stats */}
+            <StatsBar
+              activities={activities}
+              sportMode
+              totalDistance={totalDistance}
+              totalElevation={totalElevation}
+            />
 
-        {/* Heatmap */}
-        <div className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg">
-          <HeatmapGrid activities={activities} createdYear={createdYear} />
-        </div>
+            {/* Heatmap */}
+            <div className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg">
+              <HeatmapGrid activities={activities} createdYear={createdYear} />
+            </div>
 
-        {/* PRs / Bests */}
-        <SportBests
-          longestActivity={longestActivity}
-          fastestActivity={fastestActivity}
-          mostElevationActivity={mostElevationActivity}
-          isPaceSport={isPaceSport}
-        />
+            {/* PRs / Bests */}
+            <SportBests
+              longestActivity={longestActivity}
+              fastestActivity={fastestActivity}
+              mostElevationActivity={mostElevationActivity}
+              isPaceSport={isPaceSport}
+            />
 
-        {/* Full activity feed */}
-        <div className="mt-8">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-            All {getSportLabel(sportType).toLowerCase()} activities
-          </h2>
-          <ActivityFeed activities={activities} />
+            {/* Full activity feed */}
+            <div className="mt-8">
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                All {getSportLabel(sportType).toLowerCase()} activities
+              </h2>
+              <ActivityFeed activities={activities} />
+            </div>
+          </main>
+
+          <aside className="lg:w-64 flex-shrink-0">
+            <GearBar segments={gearSegments} />
+          </aside>
         </div>
       </div>
     </div>
