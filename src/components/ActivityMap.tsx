@@ -3,8 +3,18 @@
 import { useEffect, useRef } from 'react'
 import polyline from '@mapbox/polyline'
 import { useSettings } from '@/lib/settings-context'
-import type { Theme } from '@/lib/settings-context'
+import type { Theme, ColorScheme } from '@/lib/settings-context'
 import 'maplibre-gl/dist/maplibre-gl.css'
+
+const ROUTE_COLORS: Record<ColorScheme, string> = {
+  orange: '#f97316',
+  green:  '#22c55e',
+  blue:   '#3b82f6',
+  purple: '#a855f7',
+  teal:   '#14b8a6',
+  pink:   '#ec4899',
+  slate:  '#64748b',
+}
 
 
 const STYLE_DARK = 'https://tiles.openfreemap.org/styles/dark'
@@ -39,6 +49,8 @@ export function ActivityMap({ summaryPolyline }: Props) {
   const mapRef = useRef<any>(null)
   const lngLatRef = useRef<[number, number][]>([])
   const { settings } = useSettings()
+  const colorSchemeRef = useRef<ColorScheme>(settings.colorScheme)
+  colorSchemeRef.current = settings.colorScheme
 
   function addRouteLayers() {
     const map = mapRef.current
@@ -61,7 +73,7 @@ export function ActivityMap({ summaryPolyline }: Props) {
       type: 'line',
       source: 'route',
       layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: { 'line-color': '#fc4c02', 'line-width': 3.5 },
+      paint: { 'line-color': ROUTE_COLORS[colorSchemeRef.current], 'line-width': 3.5 },
     })
   }
 
@@ -132,6 +144,13 @@ export function ActivityMap({ summaryPolyline }: Props) {
     map.setStyle(resolveStyle(settings.theme))
     map.once('style.load', addRouteLayers)
   }, [settings.theme]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update route line color when color scheme changes
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !map.getLayer('route-line')) return
+    map.setPaintProperty('route-line', 'line-color', ROUTE_COLORS[settings.colorScheme])
+  }, [settings.colorScheme])
 
   if (!summaryPolyline) return null
 
