@@ -72,6 +72,129 @@ export function SplitsTable({ splitsMetric, splitsImperial, sportType }: SplitsP
           </tbody>
         </table>
       </div>
+      {splits.some((s) => s.average_heartrate) && <SplitHRChart splits={splits} />}
+    </div>
+  )
+}
+
+function SplitHRChart({ splits }: { splits: Split[] }) {
+  const hrSplits = splits.filter((s) => s.average_heartrate)
+  if (hrSplits.length < 2) return null
+
+  const hrs = hrSplits.map((s) => s.average_heartrate!)
+  const minHR = Math.min(...hrs) - 5
+  const maxHR = Math.max(...hrs) + 5
+  const avg = hrs.reduce((a, b) => a + b, 0) / hrs.length
+
+  const WIDTH = 600
+  const HEIGHT = 160
+  const PAD = { top: 32, bottom: 36, left: 40, right: 8 }
+  const chartW = WIDTH - PAD.left - PAD.right
+  const chartH = HEIGHT - PAD.top - PAD.bottom
+  const barW = chartW / splits.length
+  const gap = barW * 0.2
+
+  const avgY = PAD.top + chartH - ((avg - minHR) / (maxHR - minHR)) * chartH
+
+  return (
+    <div className="mt-3 w-full">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full h-auto text-gray-500 dark:text-gray-400">
+        {/* Chart title */}
+        <text x={WIDTH / 2} y={11} textAnchor="middle" fontSize={10} fontWeight="600" fill="currentColor">
+          Heart Rate
+        </text>
+
+        {/* Y-axis title */}
+        <text
+          x={0}
+          y={0}
+          textAnchor="middle"
+          fontSize={8}
+          fill="currentColor"
+          transform={`translate(8, ${PAD.top + chartH / 2}) rotate(-90)`}
+        >
+          bpm
+        </text>
+
+        {/* Y-axis tick labels */}
+        <text x={PAD.left - 4} y={PAD.top + 4} textAnchor="end" fontSize={8} fill="currentColor">
+          {Math.round(maxHR)}
+        </text>
+        <text x={PAD.left - 4} y={PAD.top + chartH} textAnchor="end" fontSize={8} fill="currentColor">
+          {Math.round(minHR < 0 ? 0 : minHR)}
+        </text>
+
+        {/* X-axis title */}
+        <text x={PAD.left + chartW / 2} y={HEIGHT - 2} textAnchor="middle" fontSize={8} fill="currentColor">
+          Split
+        </text>
+
+        {/* Bars */}
+        {splits.map((split, i) => {
+          const x = PAD.left + i * barW + gap / 2
+          const bw = barW - gap
+          const hrVal = split.average_heartrate ?? 0
+          const barH = hrVal ? ((hrVal - minHR) / (maxHR - minHR)) * chartH : 0
+          const y = PAD.top + chartH - barH
+
+          return (
+            <g key={split.split}>
+              {hrVal > 0 && (
+                <>
+                  <rect
+                    x={x}
+                    y={y}
+                    width={bw}
+                    height={barH}
+                    style={{ fill: 'var(--accent)' }}
+                    opacity={0.85}
+                    rx={2}
+                  />
+                  <text
+                    x={x + bw / 2}
+                    y={y - 3}
+                    textAnchor="middle"
+                    fontSize={8}
+                    fill="currentColor"
+                  >
+                    {Math.round(hrVal)}
+                  </text>
+                </>
+              )}
+              <text
+                x={x + bw / 2}
+                y={PAD.top + chartH + 12}
+                textAnchor="middle"
+                fontSize={8}
+                fill="currentColor"
+              >
+                {split.split}
+              </text>
+            </g>
+          )
+        })}
+
+        {/* Average HR reference line — rendered last to appear on top */}
+        <line
+          x1={PAD.left}
+          y1={avgY}
+          x2={WIDTH - PAD.right}
+          y2={avgY}
+          stroke="var(--accent)"
+          strokeOpacity={0.5}
+          strokeWidth={1}
+          strokeDasharray="3 3"
+        />
+        <text
+          x={WIDTH - PAD.right - 2}
+          y={avgY - 3}
+          textAnchor="end"
+          fontSize={8}
+          fill="currentColor"
+        >
+          Avg: {Math.round(avg)} bpm
+        </text>
+      </svg>
     </div>
   )
 }
