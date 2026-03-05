@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { getSessionWithRefresh } from '@/lib/auth'
-import { fetchActivity, fetchActivityComments, fetchAthlete } from '@/lib/strava'
+import { fetchActivity, fetchActivityComments, fetchAthlete, fetchActivityPhotos } from '@/lib/strava'
 import {
   formatDistance,
   formatDuration,
@@ -45,10 +45,11 @@ export default async function ActivityDetailPage({ params }: Props) {
   const activityId = parseInt(params.id, 10)
   if (isNaN(activityId)) redirect('/dashboard')
 
-  const [activity, comments, athlete] = await Promise.all([
+  const [activity, comments, athlete, photos] = await Promise.all([
     fetchActivity(session.access_token, activityId),
     fetchActivityComments(session.access_token, activityId),
     fetchAthlete(session.access_token),
+    fetchActivityPhotos(session.access_token, activityId),
   ])
 
   const isPace = PACE_SPORTS.has(activity.sport_type)
@@ -189,6 +190,30 @@ export default async function ActivityDetailPage({ params }: Props) {
 
         {/* Laps */}
         <LapsTable laps={activity.laps ?? []} sportType={activity.sport_type} />
+
+        {/* Photos */}
+        {photos.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+              Photos ({photos.length})
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {photos.map((photo) =>
+                photo.urls['600'] ? (
+                  <div key={photo.unique_id} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-[#161b22]">
+                    <Image
+                      src={photo.urls['600']}
+                      alt="Activity photo"
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Group partners */}
         {activity.athlete_count > 1 && (

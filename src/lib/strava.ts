@@ -1,4 +1,4 @@
-import type { StravaActivity, StravaAthlete, StravaClub, ClubActivity, ClubMember, SportStats, DetailedActivity, StravaComment } from './types'
+import type { StravaActivity, StravaAthlete, StravaClub, ClubActivity, ClubMember, SportStats, DetailedActivity, StravaComment, ActivityPhotoItem } from './types'
 
 export type Units = 'metric' | 'imperial'
 
@@ -106,6 +106,15 @@ export async function fetchActivityComments(accessToken: string, id: number): Pr
     next: { revalidate: 300 }, // 5 min — comments change more often
   })
   if (!res.ok) throw new Error(`Failed to fetch comments: ${res.status}`)
+  return res.json()
+}
+
+export async function fetchActivityPhotos(accessToken: string, id: number): Promise<ActivityPhotoItem[]> {
+  const res = await fetch(`${STRAVA_API}/activities/${id}/photos?size=600&photo_sources=true`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    next: { revalidate: 21600 },
+  })
+  if (!res.ok) return []
   return res.json()
 }
 

@@ -121,6 +121,11 @@ export interface ActivityPhoto {
   primary?: { urls: { '600'?: string } }
 }
 
+export interface ActivityPhotoItem {
+  unique_id: string
+  urls: { '600'?: string }
+}
+
 export interface DetailedActivity extends StravaActivity {
   map: { summary_polyline: string }
   splits_metric?: Split[]
