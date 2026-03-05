@@ -6,10 +6,6 @@ import { getSessionWithRefresh } from '@/lib/auth'
 import { fetchActivity, fetchActivityComments, fetchAthlete, fetchActivityPhotos } from '@/lib/strava'
 import {
   formatDistance,
-  formatDuration,
-  formatPace,
-  formatSpeed,
-  formatElevation,
   formatDate,
   getSportIcon,
   getSportLabel,
@@ -17,23 +13,13 @@ import {
 import { ActivityBadge } from '@/components/ActivityBadge'
 import { SplitsTable, LapsTable } from '@/components/SplitsTable'
 import { WeatherCard } from '@/components/WeatherCard'
+import { ActivityStatsChips, GearDistance } from '@/components/ActivityStatsChips'
 
 const ActivityMap = dynamic(
   () => import('@/components/ActivityMap').then((m) => m.ActivityMap),
   { ssr: false }
 )
 
-const PACE_SPORTS = new Set(['Run', 'TrailRun', 'VirtualRun', 'Walk', 'Hike', 'Swim'])
-
-function hrColor(avg: number, max: number): string {
-  if (!max) return ''
-  const ratio = avg / max
-  if (ratio < 0.6) return 'text-green-600 dark:text-green-400'
-  if (ratio < 0.7) return 'text-blue-600 dark:text-blue-400'
-  if (ratio < 0.8) return 'text-yellow-600 dark:text-yellow-400'
-  if (ratio < 0.9) return 'text-orange-600 dark:text-orange-400'
-  return 'text-red-600 dark:text-red-400'
-}
 
 interface Props {
   params: { id: string }
@@ -53,55 +39,7 @@ export default async function ActivityDetailPage({ params }: Props) {
     fetchActivityPhotos(session.access_token, activityId),
   ])
 
-  const isPace = PACE_SPORTS.has(activity.sport_type)
   const hasPolyline = !!(activity.map?.summary_polyline)
-
-  // Build stat chips
-  const chips: { label: string; value: string; icon: string; colorClass?: string }[] = []
-
-  if (activity.distance > 0) {
-    chips.push({ label: 'Distance', value: formatDistance(activity.distance), icon: '📏' })
-  }
-  chips.push({ label: 'Moving Time', value: formatDuration(activity.moving_time), icon: '⏱️' })
-  if (activity.elapsed_time !== activity.moving_time) {
-    chips.push({ label: 'Elapsed Time', value: formatDuration(activity.elapsed_time), icon: '🕐' })
-  }
-  if (activity.total_elevation_gain > 0) {
-    chips.push({ label: 'Elevation', value: formatElevation(activity.total_elevation_gain), icon: '⛰️' })
-  }
-  if (activity.distance > 0 && activity.moving_time > 0) {
-    const speed = activity.distance / activity.moving_time
-    chips.push({
-      label: isPace ? 'Pace' : 'Speed',
-      value: isPace ? formatPace(speed) : formatSpeed(speed),
-      icon: isPace ? '🏃' : '🚴',
-    })
-  }
-  if (activity.average_heartrate) {
-    chips.push({
-      label: 'Avg HR',
-      value: `${Math.round(activity.average_heartrate)} bpm`,
-      icon: '❤️',
-      colorClass: activity.max_heartrate
-        ? hrColor(activity.average_heartrate, activity.max_heartrate)
-        : undefined,
-    })
-  }
-  if (activity.max_heartrate) {
-    chips.push({ label: 'Max HR', value: `${Math.round(activity.max_heartrate)} bpm`, icon: '💗' })
-  }
-  if (activity.calories) {
-    chips.push({ label: 'Calories', value: `${Math.round(activity.calories)} kcal`, icon: '🔥' })
-  }
-  if (activity.suffer_score) {
-    chips.push({ label: 'Suffer Score', value: activity.suffer_score.toString(), icon: '😤' })
-  }
-  if (activity.achievement_count && activity.achievement_count > 0) {
-    chips.push({ label: 'Achievements', value: activity.achievement_count.toString(), icon: '🏆' })
-  }
-  if (activity.pr_count && activity.pr_count > 0) {
-    chips.push({ label: 'PRs', value: activity.pr_count.toString(), icon: '🥇' })
-  }
 
   return (
     <>
@@ -143,22 +81,19 @@ export default async function ActivityDetailPage({ params }: Props) {
         </div>
 
         {/* Stats grid */}
-        <div className="flex flex-wrap gap-3 mb-6">
-          {chips.map((chip) => (
-            <div
-              key={chip.label}
-              className="flex flex-col items-center px-4 py-3 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg min-w-[80px]"
-            >
-              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1">
-                <span className="text-sm">{chip.icon}</span>
-                <span className="text-xs">{chip.label}</span>
-              </div>
-              <span className={`text-lg font-bold text-gray-900 dark:text-white ${chip.colorClass ?? ''}`}>
-                {chip.value}
-              </span>
-            </div>
-          ))}
-        </div>
+        <ActivityStatsChips
+          distance={activity.distance}
+          moving_time={activity.moving_time}
+          elapsed_time={activity.elapsed_time}
+          total_elevation_gain={activity.total_elevation_gain}
+          average_heartrate={activity.average_heartrate}
+          max_heartrate={activity.max_heartrate}
+          calories={activity.calories}
+          suffer_score={activity.suffer_score}
+          achievement_count={activity.achievement_count}
+          pr_count={activity.pr_count}
+          sport_type={activity.sport_type}
+        />
 
         {/* Map */}
         {hasPolyline && (
@@ -187,7 +122,7 @@ export default async function ActivityDetailPage({ params }: Props) {
                   <span className="font-medium">{activity.gear.name}</span>
                   <span className="text-gray-400 dark:text-gray-500">·</span>
                   <span className="text-gray-500 dark:text-gray-400">
-                    {formatDistance(activity.gear.distance)} lifetime
+                    <GearDistance meters={activity.gear.distance} /> lifetime
                   </span>
                 </div>
               </div>

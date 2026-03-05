@@ -181,7 +181,7 @@ function SplitHRChart({ splits }: { splits: Split[] }) {
           x2={WIDTH - PAD.right}
           y2={avgY}
           stroke="var(--accent)"
-          strokeOpacity={0.5}
+          strokeOpacity={1}
           strokeWidth={1}
           strokeDasharray="3 3"
         />
