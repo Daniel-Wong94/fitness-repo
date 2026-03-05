@@ -138,6 +138,7 @@ export interface DetailedActivity extends StravaActivity {
   gear?: Gear
   photos?: ActivityPhoto
   comment_count?: number
+  start_latlng?: [number, number]
 }
 
 export interface StravaComment {

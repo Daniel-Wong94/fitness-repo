@@ -16,6 +16,7 @@ import {
 } from '@/lib/strava'
 import { ActivityBadge } from '@/components/ActivityBadge'
 import { SplitsTable, LapsTable } from '@/components/SplitsTable'
+import { WeatherCard } from '@/components/WeatherCard'
 
 const ActivityMap = dynamic(
   () => import('@/components/ActivityMap').then((m) => m.ActivityMap),
@@ -179,6 +180,15 @@ export default async function ActivityDetailPage({ params }: Props) {
               </span>
             </div>
           </div>
+        )}
+
+        {/* Weather */}
+        {activity.start_latlng?.length === 2 && (
+          <WeatherCard
+            lat={activity.start_latlng[0]}
+            lon={activity.start_latlng[1]}
+            startDate={activity.start_date}
+          />
         )}
 
         {/* Splits */}
