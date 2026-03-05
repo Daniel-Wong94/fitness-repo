@@ -14,6 +14,10 @@ import { SportTypeCard } from '@/components/SportTypeCard'
 import { ActivityFeed } from '@/components/ActivityFeed'
 import { ClubsList } from '@/components/ClubsList'
 
+function toXL(url: string): string {
+  return url.replace('large.jpg', 'xl.jpg')
+}
+
 export default async function DashboardPage() {
   const session = await getSessionWithRefresh()
 
@@ -50,7 +54,7 @@ export default async function DashboardPage() {
             <div className="mb-4">
               {athlete.profile ? (
                 <Image
-                  src={athlete.profile}
+                  src={toXL(athlete.profile)}
                   alt={`${athlete.firstname} ${athlete.lastname}`}
                   width={260}
                   height={260}
