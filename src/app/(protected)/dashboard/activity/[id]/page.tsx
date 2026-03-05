@@ -167,21 +167,6 @@ export default async function ActivityDetailPage({ params }: Props) {
           </div>
         )}
 
-        {/* Gear */}
-        {activity.gear && (
-          <div className="mb-6 p-4 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg">
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Gear</h2>
-            <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <span>🚲</span>
-              <span className="font-medium">{activity.gear.name}</span>
-              <span className="text-gray-400 dark:text-gray-500">·</span>
-              <span className="text-gray-500 dark:text-gray-400">
-                {formatDistance(activity.gear.distance)} lifetime
-              </span>
-            </div>
-          </div>
-        )}
-
         {/* Weather */}
         {activity.start_latlng?.length === 2 && (
           <WeatherCard
@@ -189,6 +174,35 @@ export default async function ActivityDetailPage({ params }: Props) {
             lon={activity.start_latlng[1]}
             startDate={activity.start_date}
           />
+        )}
+
+        {/* Gear + Athletes row */}
+        {(activity.gear || activity.athlete_count > 1) && (
+          <div className="mb-6 flex flex-wrap gap-3">
+            {activity.gear && (
+              <div className="flex-1 min-w-[200px] p-4 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg">
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Gear</h2>
+                <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <span>🚲</span>
+                  <span className="font-medium">{activity.gear.name}</span>
+                  <span className="text-gray-400 dark:text-gray-500">·</span>
+                  <span className="text-gray-500 dark:text-gray-400">
+                    {formatDistance(activity.gear.distance)} lifetime
+                  </span>
+                </div>
+              </div>
+            )}
+            {activity.athlete_count > 1 && (
+              <div className="flex-1 min-w-[200px] p-4 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 flex-shrink-0">
+                  <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.001 4.001 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5zM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5z" />
+                </svg>
+                <span>
+                  <strong className="font-semibold">{activity.athlete_count}</strong> athletes did this activity together
+                </span>
+              </div>
+            )}
+          </div>
         )}
 
         {/* Splits */}
@@ -222,18 +236,6 @@ export default async function ActivityDetailPage({ params }: Props) {
                 ) : null
               )}
             </div>
-          </div>
-        )}
-
-        {/* Group partners */}
-        {activity.athlete_count > 1 && (
-          <div className="mt-6 p-4 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 flex-shrink-0">
-              <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.001 4.001 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5zM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5z" />
-            </svg>
-            <span>
-              <strong className="font-semibold">{activity.athlete_count}</strong> athletes did this activity together
-            </span>
           </div>
         )}
 
