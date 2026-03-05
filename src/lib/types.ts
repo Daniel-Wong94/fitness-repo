@@ -47,6 +47,10 @@ export interface StravaActivity {
   gear_id?: string
   workout_type?: number
   total_photo_count?: number
+  commute?: boolean
+  trainer?: boolean
+  start_latlng?: [number, number]
+  comment_count?: number
 }
 
 export interface StravaClub {
@@ -137,8 +141,6 @@ export interface DetailedActivity extends StravaActivity {
   device_name?: string
   gear?: Gear
   photos?: ActivityPhoto
-  comment_count?: number
-  start_latlng?: [number, number]
 }
 
 export interface StravaComment {

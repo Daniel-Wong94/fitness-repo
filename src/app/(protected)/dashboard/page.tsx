@@ -15,6 +15,8 @@ import { StatsBar } from '@/components/StatsBar'
 import { SportTypeCard } from '@/components/SportTypeCard'
 import { ActivityFeed } from '@/components/ActivityFeed'
 import { ClubsList } from '@/components/ClubsList'
+import { TrophyCase } from '@/components/TrophyCase'
+import { computeTrophies } from '@/lib/trophies'
 
 // Deduplicate fetches across the render tree for this request
 const cachedFetchAthlete = cache(fetchAthlete)
@@ -210,6 +212,7 @@ async function MainContent({ token }: { token: string }) {
   const sportStats = computeSportStats(activities)
   const pinnedSports = sportStats.slice(0, 4)
   const otherSports = sportStats.slice(4)
+  const trophies = computeTrophies(activities)
 
   return (
     <>
@@ -247,6 +250,8 @@ async function MainContent({ token }: { token: string }) {
           </div>
         </details>
       )}
+
+      <TrophyCase trophies={trophies} />
 
       <div className="mt-8">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Activities</h2>
