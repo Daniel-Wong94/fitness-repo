@@ -10,7 +10,6 @@ const TURTLE_PACE_SEC_PER_KM = 9 * 60 + 20   // 9:20/km
 const TURTLE_MIN_DISTANCE_M = 1609
 const ALL_GAS_RATIO = 0.95
 const ALL_GAS_MIN_ELAPSED = 20 * 60
-const EXPLORER_RADIUS_KM = 50
 const PHANTOM_MIN_DISTANCE_M = 1609
 const OVERDRESSER_MIN_ELAPSED = 20 * 60
 
@@ -25,16 +24,6 @@ export interface Trophy {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371
-  const dLat = ((lat2 - lat1) * Math.PI) / 180
-  const dLon = ((lon2 - lon1) * Math.PI) / 180
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-}
 
 // Parse components directly from the string — avoids timezone shifts from the
 // misleading Z suffix that Strava appends to start_date_local values.
@@ -105,30 +94,6 @@ export function computeTrophies(activities: StravaActivity[]): Trophy[] {
     return Math.abs(pace - avgPace) < Math.abs(best.moving_time / best.distance - avgPace) ? a : best
   }, null)
   if (perfectlyAverageMatch) log('Perfectly Average', { id: perfectlyAverageMatch.id, name: perfectlyAverageMatch.name, pace_sec_per_km: (perfectlyAverageMatch.moving_time / perfectlyAverageMatch.distance * 1000).toFixed(1), avg_pace_sec_per_km: (avgPace * 1000).toFixed(1) })
-
-  // Explorer: any activity >50km from all previously-seen start locations
-  const sorted = [...activities].sort(
-    (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
-  )
-  const seenLocs: [number, number][] = []
-  let explorerMatch: StravaActivity | null = null
-  for (const a of sorted) {
-    if (!a.start_latlng || a.start_latlng.length < 2) continue
-    const [lat, lon] = a.start_latlng
-    if (seenLocs.length === 0) {
-      seenLocs.push([lat, lon])
-    } else {
-      const farFromAll = seenLocs.every(
-        ([lat2, lon2]) => haversineKm(lat, lon, lat2, lon2) > EXPLORER_RADIUS_KM
-      )
-      if (farFromAll) {
-        explorerMatch = a
-        break
-      }
-      seenLocs.push([lat, lon])
-    }
-  }
-  if (explorerMatch) log('Explorer', { id: explorerMatch.id, name: explorerMatch.name, start_latlng: explorerMatch.start_latlng, start_date_local: explorerMatch.start_date_local })
 
   // Turtle Mode: distance >= 1 mile AND pace > 9:20/km
   const turtleModeMatch = activities.find(
@@ -251,7 +216,6 @@ export function computeTrophies(activities: StravaActivity[]): Trophy[] {
   const elevationHoarder = !!elevationHoarderMatch
   const marathonThatWasnt = !!marathonThatWasntMatch
   const perfectlyAverage = true
-  const explorer = !!explorerMatch
   const turtleMode = !!turtleModeMatch
   const oneMeterClub = !!oneMeterClubMatch
   const speedDemon = !!speedDemonMatch
@@ -317,13 +281,6 @@ export function computeTrophies(activities: StravaActivity[]): Trophy[] {
       name: 'Perfectly Average',
       description: 'Had one activity that matched your lifetime average pace exactly',
       earned: perfectlyAverage,
-    },
-    {
-      id: 'explorer',
-      emoji: '🗺️',
-      name: 'Explorer',
-      description: 'Completed an activity more than 50 km from any previous location',
-      earned: explorer,
     },
     {
       id: 'turtle_mode',

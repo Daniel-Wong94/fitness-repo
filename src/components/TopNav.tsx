@@ -4,9 +4,10 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaRunning } from 'react-icons/fa'
-import { IoMdSettings, IoMdInformationCircleOutline } from 'react-icons/io'
+import { IoMdSettings, IoMdInformationCircleOutline, IoMdLock } from 'react-icons/io'
 import { SettingsModal } from './SettingsModal'
 import { InfoModal } from './InfoModal'
+import { PrivacyModal } from './PrivacyModal'
 import type { StravaAthlete } from '@/lib/types'
 
 interface TopNavProps {
@@ -16,6 +17,7 @@ interface TopNavProps {
 export function TopNav({ athlete }: TopNavProps) {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
+  const [privacyOpen, setPrivacyOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -44,6 +46,14 @@ export function TopNav({ athlete }: TopNavProps) {
 
         {/* Right: icon buttons + avatar */}
         <div className="flex items-center gap-0.5">
+          <button
+            onClick={() => setPrivacyOpen(true)}
+            className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
+            aria-label="Privacy policy"
+          >
+            <IoMdLock size={20} />
+          </button>
+
           <button
             onClick={() => setInfoOpen(true)}
             className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
@@ -121,6 +131,7 @@ export function TopNav({ athlete }: TopNavProps) {
 
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <InfoModal isOpen={infoOpen} onClose={() => setInfoOpen(false)} />
+      <PrivacyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </header>
   )
 }

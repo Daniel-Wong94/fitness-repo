@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import polyline from '@mapbox/polyline'
 import { getSessionWithRefresh } from '@/lib/auth'
 import { fetchActivity, fetchActivityComments, fetchAthlete, fetchActivityPhotos } from '@/lib/strava'
 import {
@@ -40,6 +41,11 @@ export default async function ActivityDetailPage({ params }: Props) {
   ])
 
   const hasPolyline = !!(activity.map?.summary_polyline)
+
+  // Derive start coordinates from the polyline (avoids caching start_latlng per Strava ToS)
+  const weatherCoords: [number, number] | undefined = hasPolyline
+    ? (polyline.decode(activity.map.summary_polyline)[0] as [number, number] | undefined)
+    : undefined
 
   return (
     <>
@@ -103,10 +109,10 @@ export default async function ActivityDetailPage({ params }: Props) {
         )}
 
         {/* Weather */}
-        {activity.start_latlng?.length === 2 && (
+        {weatherCoords && (
           <WeatherCard
-            lat={activity.start_latlng[0]}
-            lon={activity.start_latlng[1]}
+            lat={weatherCoords[0]}
+            lon={weatherCoords[1]}
             startDate={activity.start_date}
           />
         )}

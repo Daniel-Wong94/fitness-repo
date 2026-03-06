@@ -1,4 +1,5 @@
-import { FaLinkedin, FaGithub, FaStrava } from 'react-icons/fa'
+import Image from 'next/image'
+import { FaLinkedin, FaGithub } from 'react-icons/fa'
 
 const LINKS = {
   linkedin:      'https://www.linkedin.com/in/daniel-kachun-wong/',
@@ -29,9 +30,24 @@ export function Footer() {
         </div>
 
         <a href="https://www.strava.com" target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[#fc4c02] transition-colors">
-          <FaStrava size={14} />
-          <span>Powered by Strava</span>
+          className="opacity-80 hover:opacity-100 transition-opacity">
+          {/* Orange badge on light backgrounds, white badge on dark backgrounds */}
+          <Image
+            src="/powered-by-strava-orange.png"
+            alt="Powered by Strava"
+            width={120}
+            height={24}
+            className="dark:hidden"
+            unoptimized
+          />
+          <Image
+            src="/powered-by-strava-white.png"
+            alt="Powered by Strava"
+            width={120}
+            height={24}
+            className="hidden dark:block"
+            unoptimized
+          />
         </a>
       </div>
     </footer>

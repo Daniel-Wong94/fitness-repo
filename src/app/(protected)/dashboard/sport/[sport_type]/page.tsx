@@ -9,6 +9,7 @@ import {
   getSportIcon,
   getSportLabel,
 } from '@/lib/strava'
+import { CLUBS_ENABLED } from '@/config'
 import { HeatmapGrid } from '@/components/HeatmapGrid'
 import { StatsBar } from '@/components/StatsBar'
 import { ActivityFeed } from '@/components/ActivityFeed'
@@ -41,7 +42,7 @@ export default async function SportDetailPage({ params }: Props) {
   const [athlete, allActivities, allClubs] = await Promise.all([
     fetchAthlete(session.access_token),
     fetchAllActivities(session.access_token),
-    fetchClubs(session.access_token),
+    CLUBS_ENABLED ? fetchClubs(session.access_token) : Promise.resolve([]),
   ])
 
   const createdYear = athlete.created_at

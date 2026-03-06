@@ -49,7 +49,6 @@ export interface StravaActivity {
   total_photo_count?: number
   commute?: boolean
   trainer?: boolean
-  start_latlng?: [number, number]
   comment_count?: number
 }
 

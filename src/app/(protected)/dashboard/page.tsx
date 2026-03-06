@@ -17,6 +17,7 @@ import { ActivityFeed } from '@/components/ActivityFeed'
 import { ClubsList } from '@/components/ClubsList'
 import { TrophyCase } from '@/components/TrophyCase'
 import { computeTrophies } from '@/lib/trophies'
+import { CLUBS_ENABLED } from '@/config'
 
 // Deduplicate fetches across the render tree for this request
 const cachedFetchAthlete = cache(fetchAthlete)
@@ -171,9 +172,11 @@ async function AthleteSidebar({ token }: { token: string }) {
       )}
 
       {/* Clubs — independent Suspense: stays skeleton if clubs haven't resolved yet */}
-      <Suspense fallback={<ClubsSkeleton />}>
-        <ClubsSection token={token} />
-      </Suspense>
+      {CLUBS_ENABLED && (
+        <Suspense fallback={<ClubsSkeleton />}>
+          <ClubsSection token={token} />
+        </Suspense>
+      )}
     </>
   )
 }
@@ -261,10 +264,10 @@ export default async function DashboardPage() {
 
   const token = session.access_token
 
-  // Start all three fetches in parallel. React.cache deduplicates so each
+  // Start all fetches in parallel. React.cache deduplicates so each
   // async RSC below gets the same in-flight promise when it calls its fetch.
   cachedFetchAthlete(token)
-  cachedFetchClubs(token)
+  if (CLUBS_ENABLED) cachedFetchClubs(token)
   cachedFetchAllActivities(token)
 
   return (
