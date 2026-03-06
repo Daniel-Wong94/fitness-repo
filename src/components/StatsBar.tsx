@@ -1,8 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import type { StravaActivity } from '@/lib/types'
 import { computeStreak, computeBestStreak } from '@/lib/strava'
 import { useSettings } from '@/lib/settings-context'
+import { ElevationModal } from './ElevationModal'
 
 interface Props {
   activities: StravaActivity[]
@@ -15,6 +17,7 @@ interface Props {
 export function StatsBar({ activities, sportMode, totalDistance, totalElevation }: Props) {
   const { settings } = useSettings()
   const { units } = settings
+  const [elevationOpen, setElevationOpen] = useState(false)
 
   const totalKudos = activities.reduce((sum, a) => sum + (a.kudos_count || 0), 0)
   const sportTypes = new Set(activities.map((a) => a.sport_type)).size
@@ -103,6 +106,7 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation 
         label: 'Total Elevation',
         value: fmtElevation(lifetimeElevation),
         icon: <span className="text-sm">⛰️</span>,
+        onClick: () => setElevationOpen(true),
       },
       {
         label: 'Kudos',
@@ -135,7 +139,7 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation 
       },
     ].filter(Boolean)
 
-  const typedStats = allStats as { label: string; value: string; icon: React.ReactNode }[]
+  const typedStats = allStats as { label: string; value: string; icon: React.ReactNode; onClick?: () => void }[]
 
   return (
     <div>
@@ -143,21 +147,42 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation 
         Lifetime Stats
       </h2>
       <div className="grid grid-cols-5 grid-rows-2 gap-3">
-        {typedStats.map((stat) => (
-          <div
-            key={stat.label}
-            className="flex flex-col justify-between items-center px-4 py-3 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg"
-          >
-            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1">
-              {stat.icon}
-              <span className="text-xs">{stat.label}</span>
+        {typedStats.map((stat) =>
+          stat.onClick ? (
+            <button
+              key={stat.label}
+              onClick={stat.onClick}
+              className="flex flex-col justify-between items-center px-4 py-3 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg cursor-pointer hover:border-[var(--accent)] hover:bg-[var(--accent)]/5 transition-colors"
+            >
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1">
+                {stat.icon}
+                <span className="text-xs">{stat.label}</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                {stat.value}
+              </span>
+            </button>
+          ) : (
+            <div
+              key={stat.label}
+              className="flex flex-col justify-between items-center px-4 py-3 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg"
+            >
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1">
+                {stat.icon}
+                <span className="text-xs">{stat.label}</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                {stat.value}
+              </span>
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              {stat.value}
-            </span>
-          </div>
-        ))}
+          )
+        )}
       </div>
+      <ElevationModal
+        isOpen={elevationOpen}
+        onClose={() => setElevationOpen(false)}
+        activities={activities}
+      />
     </div>
   )
 }
