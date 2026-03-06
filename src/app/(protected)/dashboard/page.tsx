@@ -16,6 +16,7 @@ import { SportTypeCard } from '@/components/SportTypeCard'
 import { ActivityFeed } from '@/components/ActivityFeed'
 import { ClubsList } from '@/components/ClubsList'
 import { TrophyCase } from '@/components/TrophyCase'
+import { TutorialOverlay } from '@/components/TutorialOverlay'
 import { computeTrophies } from '@/lib/trophies'
 import { CLUBS_ENABLED } from '@/config'
 
@@ -211,14 +212,16 @@ async function MainContent({ token }: { token: string }) {
 
   return (
     <>
-      <StatsBar activities={activities} />
+      <div data-tour="lifetime-stats">
+        <StatsBar activities={activities} />
+      </div>
 
-      <div className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">
+      <div data-tour="heatmap" className="mt-6 p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">
         <HeatmapGrid activities={activities} createdYear={createdYear} />
       </div>
 
       {pinnedSports.length > 0 && (
-        <div className="mt-6">
+        <div data-tour="pinned-sports" className="mt-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Pinned sports</h2>
             <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -246,9 +249,11 @@ async function MainContent({ token }: { token: string }) {
         </details>
       )}
 
-      <TrophyCase trophies={trophies} />
+      <div data-tour="trophy-case">
+        <TrophyCase trophies={trophies} />
+      </div>
 
-      <div className="mt-8">
+      <div data-tour="recent-activities" className="mt-8">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Activities</h2>
         <ActivityFeed activities={activities} />
       </div>
@@ -289,6 +294,7 @@ export default async function DashboardPage() {
           </main>
         </div>
       </div>
+      <TutorialOverlay />
     </>
   )
 }

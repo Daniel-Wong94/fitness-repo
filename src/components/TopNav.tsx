@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { FaRunning } from 'react-icons/fa'
-import { IoMdSettings, IoMdInformationCircleOutline, IoMdLock } from 'react-icons/io'
+import { IoMdSettings, IoMdInformationCircleOutline, IoMdLock, IoMdHelpCircleOutline } from 'react-icons/io'
 import { SettingsModal } from './SettingsModal'
 import { InfoModal } from './InfoModal'
 import { PrivacyModal } from './PrivacyModal'
@@ -20,6 +21,13 @@ export function TopNav({ athlete }: TopNavProps) {
   const [privacyOpen, setPrivacyOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+  const isDashboard = pathname === '/dashboard'
+
+  function startTutorial() {
+    localStorage.removeItem('strava_tutorial_seen')
+    window.dispatchEvent(new CustomEvent('start-tutorial'))
+  }
 
   useEffect(() => {
     if (!menuOpen) return
@@ -46,6 +54,17 @@ export function TopNav({ athlete }: TopNavProps) {
 
         {/* Right: icon buttons + avatar */}
         <div className="flex items-center gap-0.5">
+          {isDashboard && (
+            <button
+              onClick={startTutorial}
+              className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
+              aria-label="Start tour"
+              title="Start tour"
+            >
+              <IoMdHelpCircleOutline size={20} />
+            </button>
+          )}
+
           <button
             onClick={() => setPrivacyOpen(true)}
             className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
@@ -63,6 +82,7 @@ export function TopNav({ athlete }: TopNavProps) {
           </button>
 
           <button
+            data-tour="settings-btn"
             onClick={() => setSettingsOpen(true)}
             className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
             aria-label="Settings"
@@ -76,6 +96,7 @@ export function TopNav({ athlete }: TopNavProps) {
           {/* Avatar dropdown */}
           <div className="relative" ref={menuRef}>
             <button
+              data-tour="avatar-btn"
               onClick={() => setMenuOpen((o) => !o)}
               className="flex items-center rounded-full ring-2 ring-transparent hover:ring-[var(--accent)]/60 transition-all focus:outline-none"
               aria-label="Open user menu"
