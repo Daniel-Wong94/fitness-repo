@@ -77,27 +77,41 @@ export function get52WeeksAgo(): number {
   return Math.floor(date.getTime() / 1000)
 }
 
+function fetchPage(accessToken: string, page: number): Promise<StravaActivity[]> {
+  return fetch(`${STRAVA_API}/athlete/activities?page=${page}&per_page=200`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    next: { revalidate: 1800 },
+  }).then(r => { if (!r.ok) throw new Error(`Failed to fetch activities: ${r.status}`); return r.json() })
+}
+
+const BATCH = 5 // pages to fetch in parallel per round
+
 export async function fetchAllActivities(
   accessToken: string
 ): Promise<StravaActivity[]> {
-  const allActivities: StravaActivity[] = []
-  let page = 1
+  // Fetch page 1 first — most users finish here
+  const first = await fetchPage(accessToken, 1)
+  if (first.length < 200) return first
+
+  const all = [...first]
+  let startPage = 2
 
   while (true) {
-    const res = await fetch(
-      `${STRAVA_API}/athlete/activities?page=${page}&per_page=200`,
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        next: { revalidate: 1800 }, // 30 min — new activities up to ~5×/day
-      }
+    const pages = await Promise.all(
+      Array.from({ length: BATCH }, (_, i) =>
+        fetchPage(accessToken, startPage + i)
+      )
     )
-    if (!res.ok) throw new Error(`Failed to fetch activities: ${res.status}`)
-    const batch: StravaActivity[] = await res.json()
-    allActivities.push(...batch)
-    if (batch.length < 200) break
-    page++
+    for (const page of pages) {
+      all.push(...page)
+      if (page.length < 200) return all
+    }
+    startPage += BATCH
   }
-  return allActivities
+}
+
+export async function fetchRecentActivities(accessToken: string): Promise<StravaActivity[]> {
+  return fetchPage(accessToken, 1)
 }
 
 export async function fetchActivity(accessToken: string, id: number): Promise<DetailedActivity> {

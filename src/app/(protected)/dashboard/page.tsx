@@ -7,6 +7,7 @@ import { getSessionWithRefresh } from '@/lib/auth'
 import {
   fetchAthlete,
   fetchAllActivities,
+  fetchRecentActivities,
   fetchAthleteStats,
   fetchClubs,
   computeSportStats,
@@ -26,6 +27,7 @@ import { User, MapPin, Users2 } from 'lucide-react'
 const cachedFetchAthlete = cache(fetchAthlete)
 const cachedFetchClubs = cache(fetchClubs)
 const cachedFetchAllActivities = cache(fetchAllActivities)
+const cachedFetchRecentActivities = cache(fetchRecentActivities)
 const cachedFetchAthleteStats = cache(fetchAthleteStats)
 
 function toXL(url: string): string {
@@ -83,12 +85,16 @@ function MainContentSkeleton() {
           <div key={i} className="h-28 bg-gray-200 dark:bg-[#30363d] rounded-lg" />
         ))}
       </div>
-      {/* Activity feed items */}
-      <div className="space-y-3">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-20 bg-gray-200 dark:bg-[#30363d] rounded-lg" />
-        ))}
-      </div>
+    </div>
+  )
+}
+
+function FeedSkeleton() {
+  return (
+    <div className="mt-8 animate-pulse space-y-3">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div key={i} className="h-20 bg-gray-200 dark:bg-[#30363d] rounded-lg" />
+      ))}
     </div>
   )
 }
@@ -244,13 +250,18 @@ async function MainContent({ token }: { token: string }) {
         <TrophyCase trophies={trophies} />
       </div>
 
-      <div data-tour="recent-activities" className="mt-8">
-        <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Activities</h2>
-        <ActivityFeed activities={activities} />
-      </div>
-
       <DashboardReadySignal />
     </>
+  )
+}
+
+async function FeedSection({ token }: { token: string }) {
+  const activities = await cachedFetchRecentActivities(token)
+  return (
+    <div data-tour="recent-activities" className="mt-8">
+      <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Activities</h2>
+      <ActivityFeed activities={activities} />
+    </div>
   )
 }
 
@@ -268,6 +279,7 @@ export default async function DashboardPage() {
   cachedFetchAthlete(token)
   if (CLUBS_ENABLED) cachedFetchClubs(token)
   cachedFetchAllActivities(token)
+  cachedFetchRecentActivities(token)
 
   return (
     <>
@@ -284,6 +296,9 @@ export default async function DashboardPage() {
           <main className="flex-1 min-w-0">
             <Suspense fallback={<MainContentSkeleton />}>
               <MainContent token={token} />
+            </Suspense>
+            <Suspense fallback={<FeedSkeleton />}>
+              <FeedSection token={token} />
             </Suspense>
           </main>
         </div>
