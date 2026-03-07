@@ -6,14 +6,22 @@ export async function POST() {
   const accessToken = session.access_token
 
   if (accessToken) {
-    await fetch('https://www.strava.com/oauth/deauthorize', {
+    const res = await fetch('https://www.strava.com/oauth/deauthorize', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `access_token=${accessToken}`,
-    }).catch(() => {})
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        access_token: accessToken,
+      }).toString(),
+    })
+
+    if (!res.ok) {
+      console.error('Failed to deauthorize Strava access token')
+    }
   }
 
-  session.destroy()
+  await session.destroy()
 
   return NextResponse.redirect(
     new URL('/', process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000')
