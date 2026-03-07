@@ -9,6 +9,7 @@ import {
 } from '@/lib/strava'
 import { ClubActivityFeed } from '@/components/ClubActivityFeed'
 import { ClubMembersList } from '@/components/ClubMembersList'
+import { Users } from 'lucide-react'
 
 interface Props {
   params: { id: string }
@@ -42,7 +43,8 @@ export default async function ClubDetailPage({ params }: Props) {
           </Link>
           <span className="text-gray-400 dark:text-gray-600 mx-1">/</span>
           <span className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            🪩 {club.name}
+            <Users size={14} className="text-gray-500 dark:text-gray-400" />
+            {club.name}
           </span>
         </nav>
 
@@ -72,7 +74,7 @@ export default async function ClubDetailPage({ params }: Props) {
                   unoptimized
                 />
               ) : (
-                <span className="text-2xl">🪩</span>
+                <Users size={24} className="text-gray-400 dark:text-gray-500" />
               )}
             </div>
           </div>

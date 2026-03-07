@@ -4,14 +4,15 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { StravaActivity } from '@/lib/types'
 import {
-  getSportIcon,
   formatDistance,
   formatDuration,
   formatDate,
   getSportLabel,
 } from '@/lib/strava'
 import { ActivityBadge } from './ActivityBadge'
+import { SportIcon } from './SportIcon'
 import { useSettings } from '@/lib/settings-context'
+import { Star, GitFork, Camera, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const PAGE_SIZE = 10
 
@@ -89,8 +90,8 @@ export function ActivityFeed({ activities }: Props) {
           <li key={activity.id} className="hover:bg-gray-50 dark:hover:bg-[#161b22] transition-colors">
             <Link href={`/dashboard/activity/${activity.id}`} className="flex items-start gap-3 px-4 py-3 w-full">
               {/* Sport icon */}
-              <div className="flex-shrink-0 mt-0.5 text-xl">
-                {getSportIcon(activity.sport_type)}
+              <div className="flex-shrink-0 mt-0.5 text-gray-500 dark:text-gray-400">
+                <SportIcon sport={activity.sport_type} size={18} />
               </div>
 
               {/* Main info */}
@@ -104,7 +105,6 @@ export function ActivityFeed({ activities }: Props) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-gray-500 dark:text-[#8b949e]">
-
                   <time dateTime={activity.start_date_local}>
                     {formatDate(activity.start_date_local)}
                   </time>
@@ -124,9 +124,7 @@ export function ActivityFeed({ activities }: Props) {
                     <>
                       <span>·</span>
                       <span className="flex items-center gap-1" title="Photos">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
-                          <path fillRule="evenodd" d="M5.5 1.5A1.5 1.5 0 0 0 4 3v.5H3A1.5 1.5 0 0 0 1.5 5v7A1.5 1.5 0 0 0 3 13.5h10A1.5 1.5 0 0 0 14.5 12V5A1.5 1.5 0 0 0 13 3.5h-1V3A1.5 1.5 0 0 0 10.5 1.5h-5ZM10 3H6V3a.5.5 0 0 1 .5-.5h3A.5.5 0 0 1 10 3Zm-2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" clipRule="evenodd" />
-                        </svg>
+                        <Camera size={12} />
                         {activity.total_photo_count}
                       </span>
                     </>
@@ -136,22 +134,15 @@ export function ActivityFeed({ activities }: Props) {
 
               {/* Right-side meta */}
               <div className="flex-shrink-0 flex flex-col items-end gap-1 text-xs text-gray-500 dark:text-[#8b949e]">
-                {/* Kudos */}
                 {activity.kudos_count > 0 && (
                   <span className="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-yellow-500">
-                      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z" />
-                    </svg>
+                    <Star size={12} className="text-yellow-500" />
                     {activity.kudos_count}
                   </span>
                 )}
-
-                {/* Group workout partners (forks) */}
                 {activity.athlete_count > 1 && (
                   <span className="flex items-center gap-1" title="Workout partners">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
-                      <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0z" />
-                    </svg>
+                    <GitFork size={12} />
                     {activity.athlete_count - 1}
                   </span>
                 )}
@@ -162,14 +153,14 @@ export function ActivityFeed({ activities }: Props) {
       </ol>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1 mt-4">
+        <div className="flex items-center justify-center gap-1 mt-4 flex-wrap">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="px-2 py-1 text-sm rounded border border-gray-200 dark:border-[#30363d] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#161b22] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 rounded border border-gray-200 dark:border-[#30363d] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#161b22] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             aria-label="Previous page"
           >
-            ‹
+            <ChevronLeft size={16} />
           </button>
 
           {pageNumbers(page, totalPages).map((p, i) =>
@@ -195,10 +186,10 @@ export function ActivityFeed({ activities }: Props) {
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="px-2 py-1 text-sm rounded border border-gray-200 dark:border-[#30363d] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#161b22] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 rounded border border-gray-200 dark:border-[#30363d] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#161b22] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             aria-label="Next page"
           >
-            ›
+            <ChevronRight size={16} />
           </button>
 
           <div className="flex items-center gap-1 ml-2 pl-2 border-l border-gray-200 dark:border-[#30363d]">

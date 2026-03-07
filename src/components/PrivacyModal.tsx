@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { IoMdClose } from 'react-icons/io'
+import { X } from 'lucide-react'
 
 interface PrivacyModalProps {
   isOpen: boolean
@@ -41,7 +41,7 @@ export function PrivacyModal({ isOpen, onClose }: PrivacyModalProps) {
             onClick={onClose}
             className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            <IoMdClose size={20} />
+            <X size={20} />
           </button>
         </div>
 

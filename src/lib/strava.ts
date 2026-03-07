@@ -205,45 +205,6 @@ export function formatDate(dateStr: string): string {
   })
 }
 
-export function getSportIcon(sportType: string): string {
-  const icons: Record<string, string> = {
-    Run: '🏃',
-    Ride: '🚴',
-    Swim: '🏊',
-    Walk: '🚶',
-    Hike: '🥾',
-    AlpineSki: '⛷️',
-    BackcountrySki: '🎿',
-    Canoeing: '🛶',
-    Crossfit: '💪',
-    EBikeRide: '⚡',
-    Elliptical: '🏋️',
-    Golf: '⛳',
-    IceSkate: '⛸️',
-    InlineSkate: '🛼',
-    Kayaking: '🚣',
-    Kitesurf: '🪁',
-    NordicSki: '⛷️',
-    RockClimbing: '🧗',
-    RollerSki: '🎿',
-    Rowing: '🚣',
-    Snowboard: '🏂',
-    Snowshoe: '❄️',
-    Soccer: '⚽',
-    StairStepper: '🪜',
-    StandUpPaddling: '🏄',
-    Surfing: '🏄',
-    TrailRun: '🏃',
-    VirtualRide: '💻',
-    VirtualRun: '💻',
-    WeightTraining: '🏋️',
-    Wheelchair: '♿',
-    Windsurf: '🌊',
-    Workout: '💪',
-    Yoga: '🧘',
-  }
-  return icons[sportType] ?? '🏅'
-}
 
 export function getSportLabel(sportType: string): string {
   const labels: Record<string, string> = {

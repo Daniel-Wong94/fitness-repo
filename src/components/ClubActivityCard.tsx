@@ -2,7 +2,8 @@
 
 import type { ClubActivity } from '@/lib/types'
 import { useSettings } from '@/lib/settings-context'
-import { getSportIcon, formatDistance, formatDuration, formatElevation } from '@/lib/strava'
+import { formatDistance, formatDuration, formatElevation } from '@/lib/strava'
+import { SportIcon } from './SportIcon'
 
 interface Props {
   activity: ClubActivity
@@ -15,8 +16,8 @@ export function ClubActivityCard({ activity }: Props) {
 
   return (
     <div className="border border-gray-200 dark:border-[#30363d] rounded-lg p-3 flex gap-3">
-      <div className="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#21262d] flex items-center justify-center text-lg flex-shrink-0">
-        {getSportIcon(activity.sport_type)}
+      <div className="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#21262d] flex items-center justify-center flex-shrink-0 text-gray-500 dark:text-gray-400">
+        <SportIcon sport={activity.sport_type} size={18} />
       </div>
       <div className="min-w-0">
         <p className="text-sm text-gray-900 dark:text-[#e6edf3] truncate">

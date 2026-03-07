@@ -1,4 +1,55 @@
 import { Trophy } from '@/lib/trophies'
+import {
+  Moon,
+  Bird,
+  Sandwich,
+  Clock,
+  Mountain,
+  PersonStanding,
+  BarChart2,
+  Turtle,
+  Ruler,
+  Zap,
+  Bike,
+  Minimize2,
+  Trophy as TrophyIcon,
+  HandMetal,
+  MessageSquare,
+  Briefcase,
+  Home,
+  Flame,
+  Calendar,
+  Ghost,
+  Shirt,
+  Waves,
+} from 'lucide-react'
+import type { LucideProps } from 'lucide-react'
+import type { ComponentType } from 'react'
+
+const TROPHY_ICONS: Record<string, ComponentType<LucideProps>> = {
+  night_owl: Moon,
+  early_bird: Bird,
+  lunch_break: Sandwich,
+  midnight_runner: Clock,
+  elevation_hoarder: Mountain,
+  marathon_that_wasnt: PersonStanding,
+  perfectly_average: BarChart2,
+  turtle_mode: Turtle,
+  one_meter_club: Ruler,
+  speed_demon: Zap,
+  century_tease: Bike,
+  bare_minimum: Minimize2,
+  pr_magnet: TrophyIcon,
+  kudos_sponge: HandMetal,
+  chatty_cathy: MessageSquare,
+  commute_goblin: Briefcase,
+  indoor_kid: Home,
+  all_gas_no_brakes: Flame,
+  weekend_ritual: Calendar,
+  the_phantom: Ghost,
+  overdresser: Shirt,
+  accidental_triathlete: Waves,
+}
 
 interface TrophyCaseProps {
   trophies: Trophy[]
@@ -7,6 +58,7 @@ interface TrophyCaseProps {
 const FIRST_ROW = 5
 
 function TrophyCard({ trophy }: { trophy: Trophy }) {
+  const Icon = TROPHY_ICONS[trophy.id] ?? TrophyIcon
   return (
     <div
       className={`p-3 rounded-lg border text-center transition-opacity
@@ -15,7 +67,12 @@ function TrophyCard({ trophy }: { trophy: Trophy }) {
         ${trophy.earned ? '' : 'opacity-35 grayscale'}`}
       title={trophy.description}
     >
-      <div className="text-2xl mb-1">{trophy.emoji}</div>
+      <div className="flex justify-center mb-2">
+        <Icon
+          size={22}
+          className={trophy.earned ? 'text-[var(--accent)]' : 'text-gray-400 dark:text-gray-600'}
+        />
+      </div>
       <div className="text-xs font-medium text-gray-900 dark:text-white leading-tight mb-1">
         {trophy.name}
       </div>

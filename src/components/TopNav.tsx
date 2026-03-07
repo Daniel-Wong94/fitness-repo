@@ -4,8 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FaRunning } from 'react-icons/fa'
-import { IoMdSettings, IoMdInformationCircleOutline, IoMdLock, IoMdHelpCircleOutline } from 'react-icons/io'
+import { Activity, Settings, Info, Lock, HelpCircle, User } from 'lucide-react'
 import { SettingsModal } from './SettingsModal'
 import { InfoModal } from './InfoModal'
 import { PrivacyModal } from './PrivacyModal'
@@ -42,11 +41,11 @@ export function TopNav({ athlete }: TopNavProps) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-[#30363d] bg-white dark:bg-[#161b22]">
-      <div className="max-w-screen-xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-screen-xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
 
         {/* Left: logo */}
         <Link href="/dashboard" className="flex items-center gap-2 shrink-0">
-          <FaRunning size={22} className="text-[var(--accent)]" />
+          <Activity size={20} className="text-[var(--accent)]" />
           <span className="font-semibold text-gray-900 dark:text-white text-sm hidden sm:block">
             Fitness Repo
           </span>
@@ -61,7 +60,7 @@ export function TopNav({ athlete }: TopNavProps) {
               aria-label="Start tour"
               title="Start tour"
             >
-              <IoMdHelpCircleOutline size={20} />
+              <HelpCircle size={18} />
             </button>
           )}
 
@@ -70,7 +69,7 @@ export function TopNav({ athlete }: TopNavProps) {
             className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
             aria-label="Privacy policy"
           >
-            <IoMdLock size={20} />
+            <Lock size={18} />
           </button>
 
           <button
@@ -78,7 +77,7 @@ export function TopNav({ athlete }: TopNavProps) {
             className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
             aria-label="About"
           >
-            <IoMdInformationCircleOutline size={20} />
+            <Info size={18} />
           </button>
 
           <button
@@ -87,7 +86,7 @@ export function TopNav({ athlete }: TopNavProps) {
             className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#21262d] transition-colors"
             aria-label="Settings"
           >
-            <IoMdSettings size={20} />
+            <Settings size={18} />
           </button>
 
           {/* Divider */}
@@ -113,9 +112,7 @@ export function TopNav({ athlete }: TopNavProps) {
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-[#30363d] flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 text-gray-500 dark:text-gray-400">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1 1 0 0 0 .904 1.414h7.262a1 1 0 0 0 .904-1.414 5.5 5.5 0 0 0-9.07 0Z" />
-                  </svg>
+                  <User size={16} className="text-gray-500 dark:text-gray-400" />
                 </div>
               )}
             </button>

@@ -2,6 +2,7 @@
 
 import { formatDistance, formatPace, formatSpeed, formatElevation } from '@/lib/strava'
 import { useSettings } from '@/lib/settings-context'
+import { Ruler, Zap, Mountain } from 'lucide-react'
 
 interface BestActivity {
   name: string
@@ -45,8 +46,9 @@ export function SportBests({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {longestActivity && (
           <div className="p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              📏 Longest
+            <p className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-1">
+              <Ruler size={13} />
+              Longest
             </p>
             <p className="text-xl font-bold text-gray-900 dark:text-white">
               {formatDistance(longestActivity.distance, units)}
@@ -59,8 +61,9 @@ export function SportBests({
 
         {fastestActivity && (
           <div className="p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              ⚡ Fastest
+            <p className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-1">
+              <Zap size={13} />
+              Fastest
             </p>
             <p className="text-xl font-bold text-gray-900 dark:text-white">
               {isPaceSport
@@ -75,8 +78,9 @@ export function SportBests({
 
         {mostElevationActivity && (
           <div className="p-4 border border-gray-200 dark:border-[#30363d] rounded-lg bg-white dark:bg-[#0d1117]">
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              ⛰️ Most elevation
+            <p className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-1">
+              <Mountain size={13} />
+              Most elevation
             </p>
             <p className="text-xl font-bold text-gray-900 dark:text-white">
               {formatElevation(mostElevationActivity.total_elevation_gain, units)}

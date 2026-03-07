@@ -2,6 +2,21 @@
 
 import { useEffect, useState } from 'react'
 import { useSettings } from '@/lib/settings-context'
+import {
+  Sun,
+  CloudSun,
+  Cloud,
+  CloudFog,
+  CloudDrizzle,
+  CloudRain,
+  CloudSnow,
+  CloudLightning,
+  Thermometer,
+  Wind,
+  Droplets,
+} from 'lucide-react'
+import type { ComponentType } from 'react'
+import type { LucideProps } from 'lucide-react'
 
 interface WeatherData {
   temperature: number
@@ -20,39 +35,39 @@ interface Props {
   startDate: string // UTC ISO string from activity.start_date
 }
 
-const WMO_CONDITIONS: Record<number, { label: string; emoji: string }> = {
-  0: { label: 'Clear sky', emoji: '☀️' },
-  1: { label: 'Mainly clear', emoji: '🌤️' },
-  2: { label: 'Partly cloudy', emoji: '⛅' },
-  3: { label: 'Overcast', emoji: '☁️' },
-  45: { label: 'Foggy', emoji: '🌫️' },
-  48: { label: 'Icy fog', emoji: '🌫️' },
-  51: { label: 'Light drizzle', emoji: '🌧️' },
-  53: { label: 'Drizzle', emoji: '🌧️' },
-  55: { label: 'Heavy drizzle', emoji: '🌧️' },
-  56: { label: 'Freezing drizzle', emoji: '🌧️' },
-  57: { label: 'Heavy freezing drizzle', emoji: '🌧️' },
-  61: { label: 'Light rain', emoji: '🌧️' },
-  63: { label: 'Rain', emoji: '🌧️' },
-  65: { label: 'Heavy rain', emoji: '🌧️' },
-  66: { label: 'Freezing rain', emoji: '🌧️' },
-  67: { label: 'Heavy freezing rain', emoji: '🌧️' },
-  71: { label: 'Light snow', emoji: '❄️' },
-  73: { label: 'Snow', emoji: '❄️' },
-  75: { label: 'Heavy snow', emoji: '❄️' },
-  77: { label: 'Snow grains', emoji: '❄️' },
-  80: { label: 'Light rain showers', emoji: '🌦️' },
-  81: { label: 'Rain showers', emoji: '🌦️' },
-  82: { label: 'Heavy rain showers', emoji: '🌦️' },
-  85: { label: 'Snow showers', emoji: '🌨️' },
-  86: { label: 'Heavy snow showers', emoji: '🌨️' },
-  95: { label: 'Thunderstorm', emoji: '⛈️' },
-  96: { label: 'Thunderstorm with hail', emoji: '⛈️' },
-  99: { label: 'Thunderstorm with heavy hail', emoji: '⛈️' },
+const WMO_CONDITIONS: Record<number, { label: string; Icon: ComponentType<LucideProps> }> = {
+  0:  { label: 'Clear sky',                     Icon: Sun },
+  1:  { label: 'Mainly clear',                  Icon: Sun },
+  2:  { label: 'Partly cloudy',                 Icon: CloudSun },
+  3:  { label: 'Overcast',                      Icon: Cloud },
+  45: { label: 'Foggy',                         Icon: CloudFog },
+  48: { label: 'Icy fog',                       Icon: CloudFog },
+  51: { label: 'Light drizzle',                 Icon: CloudDrizzle },
+  53: { label: 'Drizzle',                       Icon: CloudDrizzle },
+  55: { label: 'Heavy drizzle',                 Icon: CloudDrizzle },
+  56: { label: 'Freezing drizzle',              Icon: CloudDrizzle },
+  57: { label: 'Heavy freezing drizzle',        Icon: CloudDrizzle },
+  61: { label: 'Light rain',                    Icon: CloudRain },
+  63: { label: 'Rain',                          Icon: CloudRain },
+  65: { label: 'Heavy rain',                    Icon: CloudRain },
+  66: { label: 'Freezing rain',                 Icon: CloudRain },
+  67: { label: 'Heavy freezing rain',           Icon: CloudRain },
+  71: { label: 'Light snow',                    Icon: CloudSnow },
+  73: { label: 'Snow',                          Icon: CloudSnow },
+  75: { label: 'Heavy snow',                    Icon: CloudSnow },
+  77: { label: 'Snow grains',                   Icon: CloudSnow },
+  80: { label: 'Light rain showers',            Icon: CloudRain },
+  81: { label: 'Rain showers',                  Icon: CloudRain },
+  82: { label: 'Heavy rain showers',            Icon: CloudRain },
+  85: { label: 'Snow showers',                  Icon: CloudSnow },
+  86: { label: 'Heavy snow showers',            Icon: CloudSnow },
+  95: { label: 'Thunderstorm',                  Icon: CloudLightning },
+  96: { label: 'Thunderstorm with hail',        Icon: CloudLightning },
+  99: { label: 'Thunderstorm with heavy hail',  Icon: CloudLightning },
 }
 
-function getCondition(code: number): { label: string; emoji: string } {
-  return WMO_CONDITIONS[code] ?? { label: 'Unknown', emoji: '🌡️' }
+function getCondition(code: number): { label: string; Icon: ComponentType<LucideProps> } {
+  return WMO_CONDITIONS[code] ?? { label: 'Unknown', Icon: Thermometer }
 }
 
 function windDirection(deg: number): string {
@@ -115,7 +130,7 @@ export function WeatherCard({ lat, lon, startDate }: Props) {
       <div className="flex flex-wrap items-center gap-3">
         {/* Condition */}
         <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-          <span className="text-2xl">{condition.emoji}</span>
+          <condition.Icon size={22} className="text-[var(--accent)]" />
           <span className="font-medium">{condition.label}</span>
         </div>
 
@@ -123,19 +138,19 @@ export function WeatherCard({ lat, lon, startDate }: Props) {
 
         {/* Chips */}
         <div className="flex flex-wrap gap-2">
-          <Chip icon="🌡️" label={`${weather.temperature}${tempSuffix}`} sub={`Feels ${weather.apparentTemperature}${tempSuffix}`} />
-          <Chip icon="💨" label={`${weather.windspeed} ${windSuffix}`} sub={windDirection(weather.winddirection)} />
-          <Chip icon="💧" label={`${weather.humidity}%`} sub="Humidity" />
+          <Chip Icon={Thermometer} label={`${weather.temperature}${tempSuffix}`} sub={`Feels ${weather.apparentTemperature}${tempSuffix}`} />
+          <Chip Icon={Wind} label={`${weather.windspeed} ${windSuffix}`} sub={windDirection(weather.winddirection)} />
+          <Chip Icon={Droplets} label={`${weather.humidity}%`} sub="Humidity" />
         </div>
       </div>
     </div>
   )
 }
 
-function Chip({ icon, label, sub }: { icon: string; label: string; sub: string }) {
+function Chip({ Icon, label, sub }: { Icon: ComponentType<LucideProps>; label: string; sub: string }) {
   return (
     <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-[#30363d] rounded-md text-sm">
-      <span>{icon}</span>
+      <Icon size={14} className="text-gray-500 dark:text-gray-400 flex-shrink-0" />
       <span className="font-medium text-gray-900 dark:text-white">{label}</span>
       <span className="text-gray-400 dark:text-gray-500 text-xs">{sub}</span>
     </div>

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FaLinkedin, FaGithub } from 'react-icons/fa'
+import { Github, Linkedin } from 'lucide-react'
 
 const LINKS = {
   linkedin:      'https://www.linkedin.com/in/daniel-kachun-wong/',
@@ -14,24 +14,23 @@ export function Footer() {
         <div className="flex items-center gap-4">
           <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[var(--accent)] dark:hover:text-[var(--accent)] transition-colors">
-            <FaLinkedin size={14} />
+            <Linkedin size={14} />
             <span>LinkedIn</span>
           </a>
           <a href={LINKS.github} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[var(--accent)] dark:hover:text-[var(--accent)] transition-colors">
-            <FaGithub size={14} />
+            <Github size={14} />
             <span>GitHub</span>
           </a>
           <a href={LINKS.projectGithub} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-[var(--accent)] dark:hover:text-[var(--accent)] transition-colors">
-            <FaGithub size={14} />
+            <Github size={14} />
             <span>Source</span>
           </a>
         </div>
 
         <a href="https://www.strava.com" target="_blank" rel="noopener noreferrer"
           className="opacity-80 hover:opacity-100 transition-opacity">
-          {/* Orange badge on light backgrounds, white badge on dark backgrounds */}
           <Image
             src="/powered-by-strava-orange.png"
             alt="Powered by Strava"

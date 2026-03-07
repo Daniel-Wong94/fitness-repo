@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { IoMdClose } from 'react-icons/io'
-import { FaRunning } from 'react-icons/fa'
+import { X, Activity, Coffee } from 'lucide-react'
 
 interface InfoModalProps {
   isOpen: boolean
@@ -38,14 +37,14 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#30363d]">
           <div className="flex items-center gap-2">
-            <FaRunning size={18} className="text-[var(--accent)]" />
+            <Activity size={18} className="text-[var(--accent)]" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Fitness Repo</h2>
           </div>
           <button
             onClick={onClose}
             className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            <IoMdClose size={20} />
+            <X size={20} />
           </button>
         </div>
 
@@ -75,7 +74,7 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm text-white transition-opacity hover:opacity-90 active:opacity-80"
             style={{ backgroundColor: 'var(--accent)' }}
           >
-            <span>☕</span>
+            <Coffee size={16} />
             Buy me a coffee
           </a>
         </div>

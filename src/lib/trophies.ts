@@ -17,7 +17,6 @@ const OVERDRESSER_MIN_ELAPSED = 20 * 60
 
 export interface Trophy {
   id: string
-  emoji: string
   name: string
   description: string
   earned: boolean
@@ -235,154 +234,132 @@ export function computeTrophies(activities: StravaActivity[]): Trophy[] {
   return [
     {
       id: 'night_owl',
-      emoji: '🦉',
       name: 'Night Owl',
       description: 'Started an activity between midnight and 3:59 AM',
       earned: nightOwl,
     },
     {
       id: 'early_bird',
-      emoji: '🐦',
       name: 'Early Bird',
       description: 'Started an activity between 5:00 and 5:59 AM',
       earned: earlyBird,
     },
     {
       id: 'lunch_break',
-      emoji: '🥪',
       name: 'Lunch Break Warrior',
       description: 'Started an activity during the noon hour',
       earned: lunchBreak,
     },
     {
       id: 'midnight_runner',
-      emoji: '🌙',
       name: 'Midnight Runner',
       description: 'Finished an activity after midnight (crossed calendar day)',
       earned: midnightRunner,
     },
     {
       id: 'elevation_hoarder',
-      emoji: '⛰️',
       name: 'Elevation Hoarder',
       description: 'Climbed more meters than you traveled in distance',
       earned: elevationHoarder,
     },
     {
       id: 'marathon_that_wasnt',
-      emoji: '🏃',
       name: 'Marathon That Wasn\'t',
       description: 'Ran just shy of a marathon (26.0–26.19 miles)',
       earned: marathonThatWasnt,
     },
     {
       id: 'perfectly_average',
-      emoji: '📊',
       name: 'Perfectly Average',
       description: 'Had one activity that matched your lifetime average pace exactly',
       earned: perfectlyAverage,
     },
     {
       id: 'turtle_mode',
-      emoji: '🐢',
       name: 'Turtle Mode',
       description: 'Completed at least 1 mile at a pace slower than 9:20/km (15:00/mi)',
       earned: turtleMode,
     },
     {
       id: 'one_meter_club',
-      emoji: '📏',
       name: 'One Meter Club',
       description: 'Ran almost exactly 1 mile or 1 km (within 1%)',
       earned: oneMeterClub,
     },
     {
       id: 'speed_demon',
-      emoji: '⚡',
       name: 'Speed Demon',
       description: 'Rode faster than 30 mph (48 km/h) average on a bike',
       earned: speedDemon,
     },
     {
       id: 'century_tease',
-      emoji: '😤',
       name: 'Century Tease',
       description: 'Rode 99–100 miles on a bike without quite hitting the century',
       earned: centuryTease,
     },
     {
       id: 'bare_minimum',
-      emoji: '🤏',
       name: 'Bare Minimum',
       description: 'Logged an activity under 0.5 miles (0.8 km)',
       earned: bareMinimum,
     },
     {
       id: 'pr_magnet',
-      emoji: '🏆',
       name: 'PR Magnet',
       description: `Earned ${PR_MAGNET_MIN}+ achievements in a single activity`,
       earned: prMagnet,
     },
     {
       id: 'kudos_sponge',
-      emoji: '👏',
       name: 'Kudos Sponge',
       description: `Got ${KUDOS_SPONGE_MIN}+ kudos on a single activity`,
       earned: kudosSponge,
     },
     {
       id: 'chatty_cathy',
-      emoji: '💬',
       name: "Chatty Cathy's Workout",
       description: `Had ${CHATTY_CATHY_MIN}+ comments on a single activity`,
       earned: chattyCathy,
     },
     {
       id: 'commute_goblin',
-      emoji: '🚲',
       name: 'Commute Goblin',
       description: 'Logged at least one commute activity',
       earned: commuteGoblin,
     },
     {
       id: 'indoor_kid',
-      emoji: '🏠',
       name: 'Indoor Kid',
       description: 'Completed at least one activity on a trainer or treadmill',
       earned: indoorKid,
     },
     {
       id: 'all_gas_no_brakes',
-      emoji: '🔥',
       name: 'All Gas No Brakes',
       description: 'Spent 95%+ of elapsed time actually moving (20+ min activity)',
       earned: allGasNoBrakes,
     },
     {
       id: 'weekend_ritual',
-      emoji: '📅',
       name: 'Weekend Ritual',
       description: `Completed ${WEEKEND_RITUAL_MIN}+ activities on weekends`,
       earned: weekendRitual,
     },
     {
       id: 'the_phantom',
-      emoji: '👻',
       name: 'The Phantom',
       description: 'Logged a 1+ mile activity that got zero kudos',
       earned: thePhantom,
     },
     {
       id: 'overdresser',
-      emoji: '🧥',
       name: 'Overdresser',
       description: 'Spent more than twice as long stopped as moving (20+ min activity)',
       earned: overdresser,
     },
     {
       id: 'accidental_triathlete',
-      emoji: '🏅',
       name: 'Accidental Triathlete',
       description: 'Swam, biked, and ran all in the same calendar day',
       earned: accidentalTriathlete,

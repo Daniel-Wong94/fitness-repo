@@ -2,7 +2,9 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { IoMdClose } from 'react-icons/io'
+import { X } from 'lucide-react'
+import type { LucideProps } from 'lucide-react'
+import type { ComponentType } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
 import type { StravaActivity } from '@/lib/types'
 import { useSettings } from '@/lib/settings-context'
@@ -10,28 +12,26 @@ import { useSettings } from '@/lib/settings-context'
 export interface Milestone {
   name: string
   threshold: number  // SI units (meters)
-  emoji: string
 }
 
 interface MilestonePoint {
   date: string
   cumulativeSI: number
   name: string
-  emoji: string
 }
 
 interface MilestoneModalProps {
   isOpen: boolean
   onClose: () => void
   title: string
-  headerEmoji: string
+  HeaderIcon: ComponentType<LucideProps>
   milestones: Milestone[]
   activities: StravaActivity[]
   getValue: (activity: StravaActivity) => number
   formatDisplay: (val: number, imperial: boolean) => string
   formatThreshold: (val: number, imperial: boolean) => string
   formatY: (val: number, imperial: boolean) => string
-  emptyIcon?: string
+  EmptyIcon?: ComponentType<LucideProps>
   emptyTitle?: string
   emptyMessage?: string
 }
@@ -54,7 +54,6 @@ function computeMilestones(
         date: activity.start_date.slice(0, 10),
         cumulativeSI: cumulative,
         name: milestones[idx].name,
-        emoji: milestones[idx].emoji,
       })
       idx++
     }
@@ -66,31 +65,20 @@ function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function CustomDot(props: any) {
-  const { cx, cy, payload } = props
-  if (!payload?.emoji) return null
-  return (
-    <text x={cx} y={cy - 10} textAnchor="middle" fontSize={16}>
-      {payload.emoji}
-    </text>
-  )
-}
-
 const POINT_WIDTH = 80
 
 export function MilestoneModal({
   isOpen,
   onClose,
   title,
-  headerEmoji,
+  HeaderIcon,
   milestones,
   activities,
   getValue,
   formatDisplay,
   formatThreshold,
   formatY,
-  emptyIcon = '🏅',
+  EmptyIcon,
   emptyTitle = 'Keep going!',
   emptyMessage = 'Log some activities to unlock your first milestone.',
 }: MilestoneModalProps) {
@@ -128,9 +116,7 @@ export function MilestoneModal({
     const d = payload[0].payload as MilestonePoint
     return (
       <div className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg px-3 py-2 text-xs shadow-lg">
-        <div className="font-semibold text-gray-900 dark:text-white">
-          {d.emoji} {d.name}
-        </div>
+        <div className="font-semibold text-gray-900 dark:text-white">{d.name}</div>
         <div className="text-gray-500 dark:text-gray-400">{fmtDate(d.date)}</div>
         <div className="text-gray-700 dark:text-gray-300">{formatDisplay(d.cumulativeSI, imperial)}</div>
       </div>
@@ -149,14 +135,14 @@ export function MilestoneModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#30363d] shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-lg">{headerEmoji}</span>
+            <HeaderIcon size={18} className="text-[var(--accent)]" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
           </div>
           <button
             onClick={onClose}
             className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            <IoMdClose size={20} />
+            <X size={20} />
           </button>
         </div>
 
@@ -164,7 +150,7 @@ export function MilestoneModal({
         <div className="px-6 py-5">
           {crossed.length === 0 ? (
             <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              <div className="text-4xl mb-3">{emptyIcon}</div>
+              {EmptyIcon && <EmptyIcon size={40} className="mx-auto mb-3 text-gray-300 dark:text-gray-600" />}
               <p className="font-medium text-gray-700 dark:text-gray-300">{emptyTitle}</p>
               <p className="text-sm mt-1">{emptyMessage}</p>
             </div>
@@ -223,8 +209,8 @@ export function MilestoneModal({
                         dataKey="displayVal"
                         stroke="var(--accent)"
                         strokeWidth={2}
-                        dot={<CustomDot />}
-                        activeDot={{ r: 4, style: { outline: 'none' } }}
+                        dot={{ r: 4, fill: 'var(--accent)', strokeWidth: 0 }}
+                        activeDot={{ r: 5, style: { outline: 'none' } }}
                       />
                     </LineChart>
                   </div>
@@ -244,7 +230,9 @@ export function MilestoneModal({
                           : 'border-gray-200 dark:border-[#30363d] text-gray-400 dark:text-gray-600'
                       }`}
                     >
-                      <span className={earned ? '' : 'grayscale opacity-40'}>{m.emoji}</span>
+                      <span
+                        className={`w-2 h-2 rounded-full flex-shrink-0 ${earned ? 'bg-[var(--accent)]' : 'bg-gray-300 dark:bg-gray-600'}`}
+                      />
                       <span className="font-medium truncate">{m.name}</span>
                       <span className="ml-auto shrink-0">{formatThreshold(m.threshold, imperial)}</span>
                     </div>

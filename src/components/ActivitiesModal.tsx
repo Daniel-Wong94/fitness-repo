@@ -2,39 +2,35 @@
 
 import type { StravaActivity } from '@/lib/types'
 import { MilestoneModal, type Milestone } from './MilestoneModal'
+import { BookOpen, Activity } from 'lucide-react'
 
 const ACTIVITY_MILESTONES: Milestone[] = [
-  { name: 'First Footprint', threshold: 1, emoji: '👣' },
-  { name: 'Breaking a Sweat', threshold: 5, emoji: '💦' },
-  { name: 'Warm-Up Complete', threshold: 10, emoji: '🔥' },
-  { name: 'Finding Your Stride', threshold: 20, emoji: '🏃' },
-
-  { name: 'Quarter Century Club', threshold: 25, emoji: '🏅' },
-  { name: 'Fifty & Flying', threshold: 50, emoji: '💨' },
-  { name: 'Century of Motion', threshold: 100, emoji: '💯' },
-
-  { name: 'Double Century', threshold: 200, emoji: '⚡' },
-  { name: 'Triple Threat', threshold: 300, emoji: '🏃‍♂️' },
-  { name: 'Quad Squad', threshold: 400, emoji: '🏋️' },
-  { name: 'Five Hundred Strong', threshold: 500, emoji: '🔥' },
-
-  { name: 'The Grind Never Stops', threshold: 750, emoji: '⚙️' },
-  { name: 'Comma Club', threshold: 1000, emoji: '🏆' },
-
-  { name: 'Momentum Machine', threshold: 2000, emoji: '🚴' },
-  { name: 'Endurance Engine', threshold: 3000, emoji: '🔋' },
-  { name: 'Relentless Routine', threshold: 4000, emoji: '🧭' },
-  { name: 'Five Thousand Strong', threshold: 5000, emoji: '🌟' },
-
-  { name: 'Habit Architect', threshold: 7500, emoji: '🏗️' },
-  { name: 'Ten-Thousand Club', threshold: 10000, emoji: '👑' },
-  { name: 'Motion Veteran', threshold: 15000, emoji: '🎖️' },
-  { name: 'Endurance Icon', threshold: 20000, emoji: '🏔️' },
-  { name: 'Legend in Motion', threshold: 30000, emoji: '🌍' },
-  { name: 'Myth of Movement', threshold: 40000, emoji: '⚡' },
-  { name: 'Unstoppable Force', threshold: 50000, emoji: '🚀' },
-  { name: 'The Marathon of Life', threshold: 75000, emoji: '🌀' },
-  { name: 'Living Legend', threshold: 100000, emoji: '👑✨' },
+  { name: 'First Footprint', threshold: 1 },
+  { name: 'Breaking a Sweat', threshold: 5 },
+  { name: 'Warm-Up Complete', threshold: 10 },
+  { name: 'Finding Your Stride', threshold: 20 },
+  { name: 'Quarter Century Club', threshold: 25 },
+  { name: 'Fifty & Flying', threshold: 50 },
+  { name: 'Century of Motion', threshold: 100 },
+  { name: 'Double Century', threshold: 200 },
+  { name: 'Triple Threat', threshold: 300 },
+  { name: 'Quad Squad', threshold: 400 },
+  { name: 'Five Hundred Strong', threshold: 500 },
+  { name: 'The Grind Never Stops', threshold: 750 },
+  { name: 'Comma Club', threshold: 1000 },
+  { name: 'Momentum Machine', threshold: 2000 },
+  { name: 'Endurance Engine', threshold: 3000 },
+  { name: 'Relentless Routine', threshold: 4000 },
+  { name: 'Five Thousand Strong', threshold: 5000 },
+  { name: 'Habit Architect', threshold: 7500 },
+  { name: 'Ten-Thousand Club', threshold: 10000 },
+  { name: 'Motion Veteran', threshold: 15000 },
+  { name: 'Endurance Icon', threshold: 20000 },
+  { name: 'Legend in Motion', threshold: 30000 },
+  { name: 'Myth of Movement', threshold: 40000 },
+  { name: 'Unstoppable Force', threshold: 50000 },
+  { name: 'The Marathon of Life', threshold: 75000 },
+  { name: 'Living Legend', threshold: 100000 },
 ]
 
 function fmt(val: number) {
@@ -66,14 +62,14 @@ export function ActivitiesModal({ isOpen, onClose, activities }: ActivitiesModal
       isOpen={isOpen}
       onClose={onClose}
       title="Activities Journey"
-      headerEmoji="🏃"
+      HeaderIcon={BookOpen}
       milestones={ACTIVITY_MILESTONES}
       activities={activities}
       getValue={() => 1}
       formatDisplay={formatDisplay}
       formatThreshold={formatThreshold}
       formatY={formatY}
-      emptyIcon="🎽"
+      EmptyIcon={Activity}
       emptyTitle="Get moving!"
       emptyMessage="Log your first activity to start your journey."
     />

@@ -2,43 +2,35 @@
 
 import type { StravaActivity } from '@/lib/types'
 import { MilestoneModal, type Milestone } from './MilestoneModal'
+import { Timer, Clock } from 'lucide-react'
 
-// Thresholds in seconds
 const TIME_MILESTONES: Milestone[] = [
-  { name: 'First Hour', threshold: 3600, emoji: '⏱️' },
-  { name: 'Half Day', threshold: 43200, emoji: '🌤️' },
-  { name: 'Full Day', threshold: 86400, emoji: '🌞' },
-
-  { name: 'Two Days Moving', threshold: 172800, emoji: '🚶' },
-  { name: 'Three Days Moving', threshold: 259200, emoji: '🚶‍♂️' },
-
-  { name: 'One Week of Motion', threshold: 604800, emoji: '📅' },
-  { name: 'Two Weeks Moving', threshold: 1209600, emoji: '📆' },
-
-  { name: 'One Month of Activity', threshold: 2592000, emoji: '🌙' },
-  { name: 'Two Months of Activity', threshold: 5184000, emoji: '🌙🌙' },
-
-  { name: '1000 Hours', threshold: 3600000, emoji: '💪' },
-
-  { name: 'Three Months Moving', threshold: 7776000, emoji: '🌱' },
-  { name: 'Half Year of Motion', threshold: 15768000, emoji: '☀️' },
-
-  { name: 'One Year of Activity', threshold: 31536000, emoji: '🌍' },
-  { name: '500 Days Moving', threshold: 43200000, emoji: '🔥' },
-  { name: 'Two Years of Activity', threshold: 63072000, emoji: '🏃‍♂️' },
-  { name: '1000 Days Moving', threshold: 86400000, emoji: '🧭' },
-
-  { name: 'Three Years of Activity', threshold: 94608000, emoji: '🌄' },
-  { name: 'Five Years of Motion', threshold: 157680000, emoji: '🚀' },
-  { name: 'Ten Years of Movement', threshold: 315360000, emoji: '🏆' },
-
-  { name: 'Lifetime of Motion', threshold: 630720000, emoji: '🌌' },
-  { name: 'Legend of Endurance', threshold: 946080000, emoji: '👑' },
-  { name: 'Master of Motion', threshold: 1261440000, emoji: '⚡' },
-  { name: 'Time Traveler', threshold: 1576800000, emoji: '🕰️' },
-  { name: 'Eternal Athlete', threshold: 1892160000, emoji: '♾️' },
-  { name: 'Myth of Movement', threshold: 2522880000, emoji: '🗿' },
-  { name: 'God of Endurance', threshold: 3153600000, emoji: '⚡👑' },
+  { name: 'First Hour', threshold: 3600 },
+  { name: 'Half Day', threshold: 43200 },
+  { name: 'Full Day', threshold: 86400 },
+  { name: 'Two Days Moving', threshold: 172800 },
+  { name: 'Three Days Moving', threshold: 259200 },
+  { name: 'One Week of Motion', threshold: 604800 },
+  { name: 'Two Weeks Moving', threshold: 1209600 },
+  { name: 'One Month of Activity', threshold: 2592000 },
+  { name: 'Two Months of Activity', threshold: 5184000 },
+  { name: '1000 Hours', threshold: 3600000 },
+  { name: 'Three Months Moving', threshold: 7776000 },
+  { name: 'Half Year of Motion', threshold: 15768000 },
+  { name: 'One Year of Activity', threshold: 31536000 },
+  { name: '500 Days Moving', threshold: 43200000 },
+  { name: 'Two Years of Activity', threshold: 63072000 },
+  { name: '1000 Days Moving', threshold: 86400000 },
+  { name: 'Three Years of Activity', threshold: 94608000 },
+  { name: 'Five Years of Motion', threshold: 157680000 },
+  { name: 'Ten Years of Movement', threshold: 315360000 },
+  { name: 'Lifetime of Motion', threshold: 630720000 },
+  { name: 'Legend of Endurance', threshold: 946080000 },
+  { name: 'Master of Motion', threshold: 1261440000 },
+  { name: 'Time Traveler', threshold: 1576800000 },
+  { name: 'Eternal Athlete', threshold: 1892160000 },
+  { name: 'Myth of Movement', threshold: 2522880000 },
+  { name: 'God of Endurance', threshold: 3153600000 },
 ]
 
 function fmtSeconds(s: number): string {
@@ -95,14 +87,14 @@ export function TimeModal({ isOpen, onClose, activities }: TimeModalProps) {
       isOpen={isOpen}
       onClose={onClose}
       title="Time Journey"
-      headerEmoji="⏱️"
+      HeaderIcon={Timer}
       milestones={TIME_MILESTONES}
       activities={activities}
       getValue={(a) => a.moving_time}
       formatDisplay={formatDisplay}
       formatThreshold={formatThreshold}
       formatY={formatY}
-      emptyIcon="⌚"
+      EmptyIcon={Clock}
       emptyTitle="Start the clock!"
       emptyMessage="Log some activities to unlock your first time milestone."
     />

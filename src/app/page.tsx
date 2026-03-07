@@ -1,5 +1,5 @@
 import { ConnectButton } from '@/components/ConnectButton'
-import { FaRunning } from 'react-icons/fa'
+import { Activity, LayoutGrid, Award, Flame } from 'lucide-react'
 
 // Landing page is always light mode + green accent, regardless of user settings.
 // All dark: variants are intentionally omitted here; the green accent is set via
@@ -17,13 +17,13 @@ export default function LandingPage({
   return (
     <main
       style={LANDING_STYLE}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white px-4"
     >
-      <div className="text-center max-w-md px-6">
+      <div className="text-center max-w-md w-full">
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <div className="w-20 h-20 bg-[var(--accent)] rounded-2xl flex items-center justify-center shadow-xl">
-            <FaRunning className="w-12 h-12 text-white" size={48} />
+            <Activity className="w-10 h-10 text-white" />
           </div>
         </div>
 
@@ -51,29 +51,29 @@ export default function LandingPage({
       </div>
 
       {/* Feature highlights */}
-      <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl px-6 w-full">
+      <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl w-full">
         {[
           {
-            icon: '🟩',
+            icon: <LayoutGrid size={28} className="text-[var(--accent)]" />,
             title: 'Activity Heatmap',
             desc: '52-week activity grid, just like GitHub contributions',
           },
           {
-            icon: '🏅',
+            icon: <Award size={28} className="text-[var(--accent)]" />,
             title: 'Sport Cards',
             desc: 'See your sports as repo cards with stats and details',
           },
           {
-            icon: '🔥',
+            icon: <Flame size={28} className="text-[var(--accent)]" />,
             title: 'Streaks & Stats',
             desc: 'Track kudos, streaks, followers, and more at a glance',
           },
         ].map(({ icon, title, desc }) => (
           <div
             key={title}
-            className="text-center p-4 rounded-lg bg-white border border-gray-200 shadow-sm"
+            className="text-center p-5 rounded-xl bg-white border border-gray-200 shadow-sm"
           >
-            <div className="text-3xl mb-2">{icon}</div>
+            <div className="flex justify-center mb-3">{icon}</div>
             <h3 className="font-semibold text-gray-900 text-sm mb-1">{title}</h3>
             <p className="text-xs text-gray-500">{desc}</p>
           </div>

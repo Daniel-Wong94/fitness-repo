@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { IoMdClose } from 'react-icons/io'
+import { X, Award, Flag } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts'
 import type { StravaActivity } from '@/lib/types'
 
@@ -17,25 +17,24 @@ interface Figure {
   raceName: string
   threshold: number
   label: string
-  emoji: string
 }
 
 const MARATHON_FIGURES: Figure[] = [
-  { name: 'Al Roker',          raceName: '2010 New York City Marathon',    threshold: 25784, label: '7:09:44', emoji: '☀️' },
-  { name: 'Alicia Keys',       raceName: '2015 New York City Marathon',    threshold: 21052, label: '5:50:52', emoji: '🎹' },
-  { name: 'Freddie Prinze Jr.',raceName: '2006 Los Angeles Marathon',      threshold: 21049, label: '5:50:49', emoji: '🎬' },
-  { name: 'Katie Holmes',      raceName: '2007 New York City Marathon',    threshold: 19798, label: '5:29:58', emoji: '🎭' },
-  { name: 'Teri Hatcher',      raceName: '2014 New York City Marathon',    threshold: 18402, label: '5:06:42', emoji: '📺' },
-  { name: 'Oprah Winfrey',     raceName: '1994 Marine Corps Marathon',     threshold: 16160, label: '4:29:20', emoji: '🎤' },
-  { name: 'Ethan Hawke',       raceName: '2015 New York City Marathon',    threshold: 15930, label: '4:25:30', emoji: '🎥' },
-  { name: 'Kevin Hart',        raceName: '2017 New York City Marathon',    threshold: 14706, label: '4:05:06', emoji: '😂' },
-  { name: 'Bobby Flay',        raceName: '2010 New York City Marathon',    threshold: 14497, label: '4:01:37', emoji: '👨‍🍳' },
-  { name: 'Will Ferrell',      raceName: '2003 Boston Marathon',           threshold: 14172, label: '3:56:12', emoji: '🏃' },
-  { name: 'Ryan Reynolds',     raceName: '2008 New York City Marathon',    threshold: 13822, label: '3:50:22', emoji: '🦸' },
-  { name: 'Edward Norton',     raceName: '2009 New York City Marathon',    threshold: 13681, label: '3:48:01', emoji: '🎞️' },
-  { name: 'Gordon Ramsay',     raceName: '2004 London Marathon',           threshold: 12637, label: '3:30:37', emoji: '🔥' },
-  { name: 'Eliud Kipchoge',    raceName: '2022 Berlin Marathon',           threshold: 7269,  label: '2:01:09', emoji: '🥇' },
-  { name: 'Kelvin Kiptum',     raceName: '2023 Chicago Marathon',          threshold: 7235,  label: '2:00:35', emoji: '⚡' },
+  { name: 'Al Roker',           raceName: '2010 New York City Marathon',  threshold: 25784, label: '7:09:44' },
+  { name: 'Alicia Keys',        raceName: '2015 New York City Marathon',  threshold: 21052, label: '5:50:52' },
+  { name: 'Freddie Prinze Jr.', raceName: '2006 Los Angeles Marathon',    threshold: 21049, label: '5:50:49' },
+  { name: 'Katie Holmes',       raceName: '2007 New York City Marathon',  threshold: 19798, label: '5:29:58' },
+  { name: 'Teri Hatcher',       raceName: '2014 New York City Marathon',  threshold: 18402, label: '5:06:42' },
+  { name: 'Oprah Winfrey',      raceName: '1994 Marine Corps Marathon',   threshold: 16160, label: '4:29:20' },
+  { name: 'Ethan Hawke',        raceName: '2015 New York City Marathon',  threshold: 15930, label: '4:25:30' },
+  { name: 'Kevin Hart',         raceName: '2017 New York City Marathon',  threshold: 14706, label: '4:05:06' },
+  { name: 'Bobby Flay',         raceName: '2010 New York City Marathon',  threshold: 14497, label: '4:01:37' },
+  { name: 'Will Ferrell',       raceName: '2003 Boston Marathon',         threshold: 14172, label: '3:56:12' },
+  { name: 'Ryan Reynolds',      raceName: '2008 New York City Marathon',  threshold: 13822, label: '3:50:22' },
+  { name: 'Edward Norton',      raceName: '2009 New York City Marathon',  threshold: 13681, label: '3:48:01' },
+  { name: 'Gordon Ramsay',      raceName: '2004 London Marathon',         threshold: 12637, label: '3:30:37' },
+  { name: 'Eliud Kipchoge',     raceName: '2022 Berlin Marathon',         threshold: 7269,  label: '2:01:09' },
+  { name: 'Kelvin Kiptum',      raceName: '2023 Chicago Marathon',        threshold: 7235,  label: '2:00:35' },
 ]
 
 const MARATHON_MIN_M = 42165 // 26.2 miles
@@ -104,7 +103,7 @@ export function MarathonCompareModal({ isOpen, onClose, activities }: Props) {
 
   const userEntries: BarEntry[] = userRuns.map((a) => ({
     id: `user-${a.id}`,
-    label: `🏃 YOU (${a.name})`,
+    label: `YOU (${a.name})`,
     time: a.elapsed_time,
     isUser: true,
     sublabel: formatDate(a.start_date_local),
@@ -112,7 +111,7 @@ export function MarathonCompareModal({ isOpen, onClose, activities }: Props) {
 
   const figureEntries: BarEntry[] = MARATHON_FIGURES.map((f) => ({
     id: `figure-${f.name}`,
-    label: `${f.emoji} ${f.name}`,
+    label: f.name,
     time: f.threshold,
     isUser: false,
     sublabel: f.label,
@@ -141,14 +140,17 @@ export function MarathonCompareModal({ isOpen, onClose, activities }: Props) {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#30363d] flex-shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            🏅 Where do I rank?
-          </h2>
+          <div className="flex items-center gap-2">
+            <Award size={18} className="text-[var(--accent)]" />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Where do I rank?
+            </h2>
+          </div>
           <button
             onClick={onClose}
             className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            <IoMdClose size={20} />
+            <X size={20} />
           </button>
         </div>
 
@@ -156,7 +158,7 @@ export function MarathonCompareModal({ isOpen, onClose, activities }: Props) {
         <div className="p-6">
           {userRuns.length === 0 && (
             <div className="mb-4 flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 dark:bg-[#0d1117] border border-gray-200 dark:border-[#30363d] text-xs text-gray-500 dark:text-gray-400">
-              <span>🏁</span>
+              <Flag size={13} className="flex-shrink-0" />
               <span>Complete a marathon (26.2 mi) and your time will appear on this chart.</span>
             </div>
           )}
@@ -197,7 +199,7 @@ export function MarathonCompareModal({ isOpen, onClose, activities }: Props) {
               </BarChart>
             </div>
 
-            {/* Frozen X-axis — left margin = YAxis width + scrollable chart's left margin to align plots */}
+            {/* Frozen X-axis */}
             <BarChart
               layout="vertical"
               data={entries}

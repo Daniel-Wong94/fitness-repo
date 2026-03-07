@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { StravaClub } from '@/lib/types'
+import { Users } from 'lucide-react'
 
 interface Props {
   clubs: StravaClub[]
@@ -32,8 +33,8 @@ export function ClubsList({ clubs }: Props) {
                 />
               </div>
             ) : (
-              <div className="w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-sm flex-shrink-0">
-                🪩
+              <div className="w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+                <Users size={14} className="text-gray-500 dark:text-gray-400" />
               </div>
             )}
             <div className="min-w-0">

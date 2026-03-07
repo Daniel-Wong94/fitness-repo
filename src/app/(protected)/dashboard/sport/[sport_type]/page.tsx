@@ -6,7 +6,6 @@ import {
   fetchAthlete,
   fetchAllActivities,
   fetchClubs,
-  getSportIcon,
   getSportLabel,
 } from '@/lib/strava'
 import { CLUBS_ENABLED } from '@/config'
@@ -17,6 +16,8 @@ import { SportBests } from '@/components/SportBests'
 import { GearBar } from '@/components/GearBar'
 import { WorkoutTagsBar } from '@/components/WorkoutTagsBar'
 import { MarathonCompareSection } from '@/components/MarathonCompareSection'
+import { SportIcon } from '@/components/SportIcon'
+import { Users } from 'lucide-react'
 
 interface Props {
   params: { sport_type: string }
@@ -65,7 +66,6 @@ export default async function SportDetailPage({ params }: Props) {
   // Aggregate stats
   const totalDistance = activities.reduce((s, a) => s + a.distance, 0)
   const totalElevation = activities.reduce((s, a) => s + a.total_elevation_gain, 0)
-  const totalKudos = activities.reduce((s, a) => s + (a.kudos_count || 0), 0)
 
   // PRs / Bests
   const withDistance = activities.filter((a) => a.distance > 0)
@@ -121,7 +121,7 @@ export default async function SportDetailPage({ params }: Props) {
           </Link>
           <span className="text-gray-400 dark:text-gray-600 mx-1">/</span>
           <span className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <span>{getSportIcon(sportType)}</span>
+            <SportIcon sport={sportType} size={16} className="text-gray-600 dark:text-gray-400" />
             {getSportLabel(sportType)}
           </span>
         </nav>
@@ -190,8 +190,8 @@ export default async function SportDetailPage({ params }: Props) {
                             />
                           </div>
                         ) : (
-                          <div className="w-7 h-7 rounded-md bg-gray-100 dark:bg-[#21262d] flex items-center justify-center text-sm flex-shrink-0">
-                            🪩
+                          <div className="w-7 h-7 rounded-md bg-gray-100 dark:bg-[#21262d] flex items-center justify-center flex-shrink-0">
+                            <Users size={14} className="text-gray-500 dark:text-gray-400" />
                           </div>
                         )}
                         <span className="text-sm text-gray-900 dark:text-[#e6edf3] truncate group-hover:text-[var(--accent)] transition-colors">
