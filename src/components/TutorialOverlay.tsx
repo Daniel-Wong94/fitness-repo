@@ -199,10 +199,7 @@ export function TutorialOverlay() {
         }}
         className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-xl shadow-2xl p-4"
       >
-        <p className="text-xs font-semibold text-[var(--accent)] uppercase tracking-wide mb-1">
-          Step {step + 1} of {TOUR_STEPS.length}
-        </p>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+        <h3 className="text-xs font-semibold text-[var(--accent)] uppercase tracking-wide mb-1">
           {currentStep.name}
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
