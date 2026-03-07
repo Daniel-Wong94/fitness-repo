@@ -167,7 +167,7 @@ src/
 
 ## Development Approaches
 
-This section documents the key architectural decisions made during development — including the problems we ran into and how we solved them.
+This section documents the key architectural decisions made during development — including the problems I ran into and how I solved them.
 
 ---
 
@@ -175,7 +175,7 @@ This section documents the key architectural decisions made during development �
 
 **Problem:** The dashboard is a server-rendered page with multiple async components (sidebar, main content, feed) that all need the same data. Naive implementations either fetch the same data multiple times or require complex prop-drilling from a single top-level fetch.
 
-**Solution:** We use Next.js's built-in fetch deduplication combined with `React.cache()`. Each data-fetching function is wrapped with `cache()` at the page level:
+**Solution:** Use Next.js's built-in fetch deduplication combined with `React.cache()`. Each data-fetching function is wrapped with `cache()` at the page level:
 
 ```ts
 const cachedFetchAthlete = cache(fetchAthlete)
@@ -217,7 +217,7 @@ The sidebar becomes interactive before the activity data arrives. The activity f
 
 **Problem:** The Strava API returns activities 200 at a time. The original implementation used a sequential `while` loop — each page waited for the previous one before starting. For a user with 2,000 activities (10 pages), this meant ~10 × 200ms = 2 seconds of pure serial wait time.
 
-**Solution:** We replaced the sequential loop with a batched-parallel fetch strategy using `Promise.all`:
+**Solution:** Replaced the sequential loop with a batched-parallel fetch strategy using `Promise.all`:
 
 ```ts
 const BATCH = 5 // pages to fetch in parallel per round
@@ -250,7 +250,7 @@ export async function fetchAllActivities(accessToken: string): Promise<StravaAct
 
 **Problem:** The activity feed (`ActivityFeed`) was rendered inside `MainContent`, which waited for *all* pages of activities before rendering anything. Users had to wait for the full parallel fetch to complete even though the feed only ever displays recent activities.
 
-**Solution:** We extracted a dedicated `FeedSection` RSC that calls `fetchRecentActivities` — a single-page fetch that returns only the 200 most recent activities:
+**Solution:** Extracted a dedicated `FeedSection` RSC that calls `fetchRecentActivities` — a single-page fetch that returns only the 200 most recent activities:
 
 ```ts
 export async function fetchRecentActivities(accessToken: string): Promise<StravaActivity[]> {
