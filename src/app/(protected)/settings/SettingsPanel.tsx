@@ -38,7 +38,7 @@ function OptionGroup<T extends string>({
 
 
 const SCHEME_LABELS: Record<ColorScheme, string> = {
-  orange: 'Orange',
+  orange: 'Strava Orange',
   green: 'Green',
   blue: 'Blue',
   purple: 'Purple',

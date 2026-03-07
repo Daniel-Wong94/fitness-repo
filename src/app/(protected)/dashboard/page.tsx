@@ -112,20 +112,25 @@ async function AthleteSidebar({ token }: { token: string }) {
     <>
       {/* Avatar */}
       <div className="mb-4">
-        {athlete.profile ? (
-          <Image
-            src={toXL(athlete.profile)}
-            alt={`${athlete.firstname} ${athlete.lastname}`}
-            width={260}
-            height={260}
-            className="rounded-full w-full max-w-[260px] border-2 border-gray-200 dark:border-[#30363d]"
-            unoptimized
-          />
-        ) : (
-          <div className="w-full max-w-[260px] aspect-square rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-            <User size={80} className="text-gray-400 dark:text-gray-500" />
-          </div>
-        )}
+        <div
+          className={`w-fit rounded-full ${athlete.premium ? 'p-[3px]' : ''}`}
+          style={athlete.premium ? { background: 'linear-gradient(135deg, var(--accent), var(--accent-hover))' } : undefined}
+        >
+          {athlete.profile ? (
+            <Image
+              src={toXL(athlete.profile)}
+              alt={`${athlete.firstname} ${athlete.lastname}`}
+              width={260}
+              height={260}
+              className={`rounded-full block ${athlete.premium ? 'border-2 border-white dark:border-[#0d1117]' : 'border-2 border-gray-200 dark:border-[#30363d]'}`}
+              unoptimized
+            />
+          ) : (
+            <div className={`w-full max-w-[260px] aspect-square rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${athlete.premium ? 'border-2 border-white dark:border-[#0d1117]' : 'border-2 border-gray-200 dark:border-[#30363d]'}`}>
+              <User size={80} className="text-gray-400 dark:text-gray-500" />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Name */}
