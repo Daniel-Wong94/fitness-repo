@@ -5,8 +5,8 @@ import { Activity, LayoutGrid, Award, Flame } from 'lucide-react'
 // All dark: variants are intentionally omitted here; the green accent is set via
 // a CSS variable override on the wrapper so ConnectButton picks it up automatically.
 const LANDING_STYLE = {
-  '--accent': '#22c55e',
-  '--accent-hover': '#16a34a',
+  '--accent': '#FC4C02',
+  '--accent-hover': '#E34402',
 } as React.CSSProperties
 
 export default function LandingPage({
