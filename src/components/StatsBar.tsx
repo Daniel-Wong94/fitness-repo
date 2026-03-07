@@ -55,14 +55,14 @@ export function StatsBar({ activities, sportMode, totalDistance, totalElevation,
 
   function fmtDistance(meters: number) {
     if (units === 'imperial') {
-      return `${(meters / 1609.344).toFixed(1)}mi`
+      return `${(meters / 1609.344).toFixed(1)} mi`
     }
-    return `${(meters / 1000).toFixed(0)}km`
+    return `${(meters / 1000).toFixed(0)} km`
   }
 
   function fmtElevation(meters: number) {
-    if (units === 'imperial') return `${Math.round(meters * 3.28084)}ft`
-    return `${Math.round(meters)}m`
+    if (units === 'imperial') return `${Math.round(meters * 3.28084)} ft`
+    return `${Math.round(meters)} m`
   }
 
   function fmtTotalTime(seconds: number) {
