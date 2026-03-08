@@ -1,5 +1,6 @@
 import { ConnectButton } from '@/components/ConnectButton'
 import { DemoLink } from '@/components/DemoLink'
+import { LandingPageTracker } from '@/components/LandingPageTracker'
 import { GitFitLogo } from '@/components/GitFitLogo'
 import { CyclingWord } from '@/components/CyclingWord'
 import { LayoutGrid, Award, Flame, Github, Linkedin } from 'lucide-react'
@@ -29,6 +30,7 @@ export default function LandingPage({
 }) {
   return (
     <div className="min-h-screen bg-[#0d1117] text-white flex flex-col">
+      <LandingPageTracker />
 
       {/* Nav */}
       <header className="animate-fade-in flex items-center justify-between px-8 py-5 max-w-screen-xl mx-auto w-full" style={{ animationDelay: '0ms' }}>

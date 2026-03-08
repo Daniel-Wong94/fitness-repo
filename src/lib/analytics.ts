@@ -5,6 +5,7 @@ declare global {
 }
 
 type EventMap = {
+  landing_page_view: undefined
   connect_strava: undefined
   view_demo: undefined
   open_info_modal: undefined
