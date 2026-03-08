@@ -38,7 +38,7 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#30363d]">
           <div className="flex items-center gap-2">
             <Activity size={18} className="text-[var(--accent)]" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Fitness Repo</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">GitFit</h2>
           </div>
           <button
             onClick={onClose}
@@ -51,7 +51,7 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
         {/* Body */}
         <div className="px-6 py-5 space-y-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
           <p>
-            <span className="font-semibold text-gray-900 dark:text-white">Fitness Repo</span> is a
+            <span className="font-semibold text-gray-900 dark:text-white">GitFit</span> is a
             GitHub-style dashboard for your Strava activity data. It visualizes your workout history
             as a contribution heatmap, surfaces per-sport (repo) stats, and awards fun trophies based on
             your real training patterns.

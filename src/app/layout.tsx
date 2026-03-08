@@ -4,7 +4,7 @@ import { SettingsProvider } from '@/lib/settings-context'
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts'
 
 export const metadata: Metadata = {
-  title: 'Fitness Repo',
+  title: 'GitFit',
   description: 'Your fitness activity dashboard — GitHub style',
 }
 

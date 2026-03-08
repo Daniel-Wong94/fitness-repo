@@ -101,7 +101,7 @@ export function PrivacyModal({ isOpen, onClose }: PrivacyModalProps) {
               >
                 Strava Settings → My Apps
               </a>{' '}
-              and disconnect Fitness Repo.
+              and disconnect GitFit.
             </p>
           </section>
 

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 44" width="344" height="88">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&amp;display=swap');</style>
+  </defs>
+  <text x="0" y="36" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="38" font-weight="800" fill="#111827" letter-spacing="-1">Git<tspan fill="#FC4C02">Fit</tspan></text>
+  <rect x="144" y="4" width="22" height="36" rx="2" fill="#FC4C02"/>
+</svg>

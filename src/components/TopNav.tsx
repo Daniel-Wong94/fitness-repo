@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Activity, Settings, Info, Lock, HelpCircle, User } from 'lucide-react'
+import { Settings, Info, Lock, HelpCircle, User } from 'lucide-react'
 import { SettingsModal } from './modal/SettingsModal'
 import { InfoModal } from './modal/InfoModal'
 import { PrivacyModal } from './modal/PrivacyModal'
@@ -44,11 +44,9 @@ export function TopNav({ athlete }: TopNavProps) {
       <div className="max-w-screen-xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
 
         {/* Left: logo */}
-        <Link href="/dashboard" className="flex items-center gap-2 shrink-0">
-          <Activity size={20} className="text-[var(--accent)]" />
-          <span className="font-semibold text-gray-900 dark:text-white text-sm hidden sm:block">
-            Fitness Repo
-          </span>
+        <Link href="/dashboard" className="shrink-0">
+          <Image src="/gitfit-logo-light.svg" alt="GitFit" width={86} height={22} className="block dark:hidden" priority />
+          <Image src="/gitfit-logo.svg" alt="GitFit" width={86} height={22} className="hidden dark:block" priority />
         </Link>
 
         {/* Right: icon buttons + avatar */}

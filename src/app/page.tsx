@@ -1,5 +1,6 @@
+import Image from 'next/image'
 import { ConnectButton } from '@/components/ConnectButton'
-import { Activity, LayoutGrid, Award, Flame } from 'lucide-react'
+import { LayoutGrid, Award, Flame } from 'lucide-react'
 
 // Landing page is always light mode + green accent, regardless of user settings.
 // All dark: variants are intentionally omitted here; the green accent is set via
@@ -21,15 +22,10 @@ export default function LandingPage({
     >
       <div className="text-center max-w-md w-full">
         {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 bg-[var(--accent)] rounded-2xl flex items-center justify-center shadow-xl">
-            <Activity className="w-10 h-10 text-white" />
-          </div>
+        <div className="flex justify-center mb-8">
+          <Image src="/gitfit-logo-light.svg" alt="GitFit" width={200} height={51} priority />
         </div>
 
-        <h1 className="text-4xl font-bold text-gray-900 mb-3">
-          Fitness Repo
-        </h1>
         <p className="text-lg text-gray-600 mb-8">
           Your activity data, visualized like a GitHub profile.
           Heatmaps, streaks, and more.
