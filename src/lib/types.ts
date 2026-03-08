@@ -7,7 +7,6 @@ export interface AthleteGear {
 
 export interface StravaAthlete {
   id: number
-  username: string
   firstname: string
   lastname: string
   city: string

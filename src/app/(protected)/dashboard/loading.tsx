@@ -12,9 +12,8 @@ export default function DashboardLoading() {
             {/* Avatar */}
             <Skeleton className="w-full max-w-[260px] aspect-square rounded-full" />
 
-            {/* Name + username */}
+            {/* Name */}
             <Skeleton className="mt-4 h-7 w-40" />
-            <Skeleton className="mt-1.5 h-5 w-28" />
 
             {/* Location */}
             <Skeleton className="mt-3 h-4 w-36" />

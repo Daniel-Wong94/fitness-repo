@@ -137,11 +137,6 @@ async function AthleteSidebar({ token }: { token: string }) {
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
         {athlete.firstname} {athlete.lastname}
       </h1>
-      {athlete.username && (
-        <p className="text-lg text-gray-500 dark:text-[#8b949e] mt-0.5">
-          @{athlete.username}
-        </p>
-      )}
 
       {/* Location */}
       {location && (

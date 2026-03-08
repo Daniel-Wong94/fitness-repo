@@ -124,11 +124,6 @@ export function TopNav({ athlete, sticky = true }: TopNavProps) {
                     <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                       {athlete.firstname} {athlete.lastname}
                     </p>
-                    {athlete.username && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
-                        @{athlete.username}
-                      </p>
-                    )}
                   </div>
                 )}
                 <div className="py-1">
