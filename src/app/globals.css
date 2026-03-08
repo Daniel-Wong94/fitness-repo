@@ -26,10 +26,10 @@
     --hm-4: #ea580c;
   }
 
-  /* ── Green scheme ── */
+  /* ── GitHub Green scheme ── */
   [data-color-scheme="green"] {
-    --accent: #22c55e;
-    --accent-hover: #16a34a;
+    --accent: #2da44e;
+    --accent-hover: #2c974b;
     --hm-1: #9be9a8;
     --hm-2: #40c463;
     --hm-3: #30a14e;
