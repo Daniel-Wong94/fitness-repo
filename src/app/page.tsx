@@ -85,10 +85,17 @@ export default function LandingPage({
             <div className="animate-fade-up flex items-center gap-4 flex-wrap" style={{ animationDelay: '240ms' }}>
               <ConnectButton />
             </div>
-
             <p className="animate-fade-up mt-5 text-xs text-gray-600" style={{ animationDelay: '300ms' }}>
               Read-only access · No data stored
             </p>
+
+            <p className="mt-4 text-sm text-gray-500">
+              Don&apos;t have Strava?{' '}
+              <a href="/demo" className="text-[#FC4C02] hover:underline font-medium">
+                View demo →
+              </a>
+            </p>
+
           </div>
 
           {/* Right — feature cards */}

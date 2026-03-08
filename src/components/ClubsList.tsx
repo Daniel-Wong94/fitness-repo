@@ -1,6 +1,9 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import type { StravaClub } from '@/lib/types'
+import { useDemoMode } from './DemoModeProvider'
 import { Users } from 'lucide-react'
 
 interface Props {
@@ -8,6 +11,8 @@ interface Props {
 }
 
 export function ClubsList({ clubs }: Props) {
+  const { isDemo, showDemoModal } = useDemoMode()
+
   if (clubs.length === 0) {
     return (
       <p className="text-gray-500 dark:text-gray-400 text-sm">
@@ -20,7 +25,7 @@ export function ClubsList({ clubs }: Props) {
     <ul className="space-y-3">
       {clubs.map((club) => (
         <li key={club.id} className="flex items-center gap-3">
-          <Link href={`/dashboard/club/${club.id}`} className="flex items-center gap-3 min-w-0 flex-1 group">
+          <Link href={`/dashboard/club/${club.id}`} onClick={isDemo ? (e) => { e.preventDefault(); showDemoModal() } : undefined} className="flex items-center gap-3 min-w-0 flex-1 group">
             {club.profile_medium ? (
               <div className="w-8 h-8 rounded-md overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
                 <Image

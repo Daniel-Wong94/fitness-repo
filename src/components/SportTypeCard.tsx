@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { SportStats } from '@/lib/types'
 import { getSportLabel, formatDistance } from '@/lib/strava'
 import { useSettings } from '@/lib/settings-context'
+import { useDemoMode } from './DemoModeProvider'
 import { SportIcon } from './SportIcon'
 import { BookOpen, Star } from 'lucide-react'
 
@@ -14,10 +15,12 @@ interface Props {
 
 export function SportTypeCard({ sport, pinned }: Props) {
   const { settings } = useSettings()
+  const { isDemo, showDemoModal } = useDemoMode()
 
   return (
     <Link
       href={`/dashboard/sport/${encodeURIComponent(sport.sport_type)}`}
+      onClick={isDemo ? (e) => { e.preventDefault(); showDemoModal() } : undefined}
       className="group block p-4 border border-gray-200 dark:border-[#30363d] rounded-lg hover:border-gray-400 dark:hover:border-[#8b949e] bg-white dark:bg-[#0d1117] transition-colors"
     >
       <div className="flex items-start justify-between mb-3">
