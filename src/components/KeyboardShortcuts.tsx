@@ -14,19 +14,22 @@ export function KeyboardShortcuts() {
     function handleKeyDown(e: KeyboardEvent) {
       const target = e.target as HTMLElement
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return
-      if (e.metaKey || e.ctrlKey || e.altKey) return
+      if (!e.altKey || e.metaKey || e.ctrlKey) return
 
-      switch (e.key.toLowerCase()) {
-        case 't': {
+      switch (e.code) {
+        case 'KeyT': {
+
           const next = THEMES[(THEMES.indexOf(settings.theme) + 1) % THEMES.length]
           updateSetting('theme', next)
           break
         }
-        case 'u': {
+        case 'KeyU': {
+
           updateSetting('units', settings.units === 'metric' ? 'imperial' : 'metric')
           break
         }
-        case 'c': {
+        case 'KeyC': {
+
           const next = COLOR_SCHEMES[(COLOR_SCHEMES.indexOf(settings.colorScheme) + 1) % COLOR_SCHEMES.length]
           updateSetting('colorScheme', next)
           break
