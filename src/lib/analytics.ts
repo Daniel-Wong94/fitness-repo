@@ -1,10 +1,5 @@
-declare global {
-  interface Window {
-    gtag: (...args: unknown[]) => void
-  }
-}
+import { track } from '@vercel/analytics'
 
 export function trackEvent(name: string, params?: Record<string, string | number>) {
-  if (typeof window === 'undefined' || !window.gtag) return
-  window.gtag('event', name, params)
+  track(name, params)
 }

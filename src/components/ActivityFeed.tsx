@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { StravaActivity } from '@/lib/types'
 import { useDemoMode } from './DemoModeProvider'
+import { trackEvent } from '@/lib/analytics'
 import {
   formatDistance,
   formatDuration,
@@ -90,7 +91,7 @@ export function ActivityFeed({ activities }: Props) {
       <ol className="border border-gray-200 dark:border-[#30363d] rounded-lg divide-y divide-gray-200 dark:divide-[#30363d] overflow-hidden">
         {shown.map((activity) => (
           <li key={activity.id} className="hover:bg-gray-50 dark:hover:bg-[#161b22] transition-colors">
-            <Link href={`/dashboard/activity/${activity.id}`} onClick={isDemo ? (e) => { e.preventDefault(); showDemoModal() } : undefined} className="flex items-start gap-3 px-4 py-3 w-full">
+            <Link href={`/dashboard/activity/${activity.id}`} onClick={isDemo ? (e) => { e.preventDefault(); showDemoModal() } : () => trackEvent('view_activity')} className="flex items-start gap-3 px-4 py-3 w-full">
               {/* Sport icon */}
               <div className="flex-shrink-0 mt-0.5 text-gray-500 dark:text-gray-400">
                 <SportIcon sport={activity.sport_type} size={18} />
