@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { ConnectButton } from '@/components/ConnectButton'
 import { GitFitLogo } from '@/components/GitFitLogo'
 import { LayoutGrid, Award, Flame, Github, Linkedin } from 'lucide-react'
@@ -32,26 +31,12 @@ export default function LandingPage({
       {/* Nav */}
       <header className="animate-fade-in flex items-center justify-between px-8 py-5 max-w-screen-xl mx-auto w-full" style={{ animationDelay: '0ms' }}>
         <GitFitLogo width={110} variant="dark" />
-        <div className="flex items-center gap-3">
-          <a
-            href="https://github.com/Daniel-Wong94"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="GitHub"
-          >
-            <Github size={18} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/daniel-kachun-wong/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="LinkedIn"
-          >
-            <Linkedin size={18} />
-          </a>
+
+        <div className="animate-fade-up inline-flex items-center gap-2 border border-white/15 rounded-full px-3 py-1 text-xs text-gray-400 mb-8" style={{ animationDelay: '0ms' }}>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FC4C02] animate-glow-pulse items-center" />
+          Powered by Strava
         </div>
+
       </header>
 
       {/* Hero */}
@@ -60,10 +45,6 @@ export default function LandingPage({
 
           {/* Left */}
           <div>
-            <div className="animate-fade-up inline-flex items-center gap-2 border border-white/15 rounded-full px-3 py-1 text-xs text-gray-400 mb-8" style={{ animationDelay: '0ms' }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FC4C02] animate-glow-pulse" />
-              Powered by Strava
-            </div>
 
             <h1 className="animate-fade-up text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6" style={{ animationDelay: '80ms' }}>
               Your fitness,<br />
