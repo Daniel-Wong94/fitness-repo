@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const WORDS = ['visualized.', 'tracked.', 'committed.', 'pushed further.']
+const WORDS = ['visualized', 'tracked', 'committed', 'pushed', 'approved', 'contributed']
 
 export function CyclingWord() {
   const [index, setIndex] = useState(0)
@@ -27,7 +27,7 @@ export function CyclingWord() {
         transform: visible ? 'translateY(0)' : 'translateY(8px)',
       }}
     >
-      {WORDS[index]}
+      {WORDS[index]}.
     </span>
   )
 }
