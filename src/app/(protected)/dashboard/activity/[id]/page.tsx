@@ -16,7 +16,7 @@ import { WeatherCard } from '@/components/WeatherCard'
 import { ActivityStatsChips, GearDistance } from '@/components/ActivityStatsChips'
 import { SportIcon } from '@/components/SportIcon'
 import { ActivityPageTracker } from '@/components/ActivityPageTracker'
-import { Users2, Bike } from 'lucide-react'
+import { Users2, Bike, Footprints } from 'lucide-react'
 
 const ActivityMap = dynamic(
   () => import('@/components/ActivityMap').then((m) => m.ActivityMap),
@@ -127,7 +127,10 @@ export default async function ActivityDetailPage({ params }: Props) {
               <div className="flex-1 min-w-[200px] p-4 bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg">
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Gear</h2>
                 <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                  <Bike size={16} className="text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                  {['Run', 'TrailRun', 'VirtualRun', 'Walk', 'Hike'].includes(activity.sport_type)
+                    ? <Footprints size={16} className="text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                    : <Bike size={16} className="text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                  }
                   <span className="font-medium">{activity.gear.name}</span>
                   <span className="text-gray-400 dark:text-gray-500">·</span>
                   <span className="text-gray-500 dark:text-gray-400">
