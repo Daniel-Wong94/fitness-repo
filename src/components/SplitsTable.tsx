@@ -186,11 +186,11 @@ function SplitHRChart({ splits }: { splits: Split[] }) {
           strokeDasharray="3 3"
         />
         <text
-          x={WIDTH - PAD.right - 2}
-          y={avgY - 3}
+          x={WIDTH - PAD.right}
+          y={PAD.top - 6}
           textAnchor="end"
           fontSize={8}
-          fill="currentColor"
+          fill="var(--accent)"
         >
           Avg: {Math.round(avg)} bpm
         </text>
